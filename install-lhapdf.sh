@@ -13,11 +13,10 @@ VERSION=6.2.3
 rm -r lhapdf6 >& /dev/null
 mkdir -p lhapdf6
 cd lhapdf6
+echo "Installing LHAPDF version $VERSION"
 
 rm pdfinstall.log >& /dev/null
 rm -r bin include lib share LHAPDF-${VERSION} >& /dev/null
-
-echo "Installing LHAPDF version $VERSION"
 
 echo "Downloading tar file..."
 wget http://www.hepforge.org/archive/lhapdf/LHAPDF-${VERSION}.tar.gz

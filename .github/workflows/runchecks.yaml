@@ -16,43 +16,46 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Setup conda
+    - name: Setup Python & PIP
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Install yaml-cpp
-      shell: bash --login {0}
-      run: |
-        chmod +x install-yaml.sh
-        source install-yaml.sh
-
-    - name: Install lhapdf
-      shell: bash --login {0}
-      run: |
-        chmod +x install-lhapdf.sh
-        source install-lhapdf.sh
-
-    - name: Install cuba
-      shell: bash --login {0}
-      run: |
-        chmod +x install-cuba.sh
-        ./install-cuba.sh
-
-    - name: Install hqt-mon
-      shell: bash --login {0}
+    - name: Install meson & ninja
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install meson ninja
 
-    - name: Install hqt-mon package & produce results
+    - name: Install dependencies & HpT-MON
       shell: bash --login {0}
       run: |
+
+        # make scripts executable
+        chmod +x install-yaml.sh
+        chmod +x install-lhapdf.sh
+        chmod +x install-cuba.sh
+
+        echo "$PWD"
+        echo "[+] Install YAML:"
+        source install-yaml.sh
+        echo "[+] Install LHAPDF:"
+        echo "$PWD"
+        source install-lhapdf.sh
+        echo "[+] Install LHHAPDF:"
+        ./install-cuba.sh
+        echo "[+] Install GSL:"
+        sudo apt-get install libgsl-dev
+        
+        echo "[+] Install HpT-MON:"
         meson setup builddir
         cd builddir
         meson compile
+
+        pkg-config --libs yaml-cpp
+        echo "[+] Run LO results:"
         ./higgs ../runcards/higgsfo-lo.yaml
+        echo "[+] Run NLO results:"
         ./higgs ../runcards/higgsfo-nlo.yaml
 
     # - name: Post results as PR comments
