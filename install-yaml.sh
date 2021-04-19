@@ -35,7 +35,8 @@ then
     exit -1
 fi
 
-make install
+echo "Install yaml-cpp"
+sudo make install
 
 export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$(pwd)
 echo "Added $PWD to PKG-CONFIG path."
