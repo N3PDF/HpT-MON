@@ -18,13 +18,13 @@ In addition, `HpT-MON` relies on third party libraries:
 * [CUBA](http://www.feynarts.de/cuba/): for the Monte Carlo integration. If
   Cuba is not installed yet on the system, run the following:
   ```bash
-  ./install-cuba
+  ./install-cuba.sh
   ```
 * [YAML-cpp](https://github.com/jbeder/yaml-cpp): for the parsing of the input
   run card. If it is not installed in the system (make sure that duplicate
   installations are not present as this might results in an error), run:
   ```bash
-  ./install-yaml-cpp
+  ./install-yaml.sh
   ```
 
 #### Compile & run the code
@@ -39,7 +39,7 @@ meson compile
 This will generate a binary called <kbd>higgs</kbd> in the `builddir` directory. To run
 the code, use one of the run cards in the `runcards` folder as follows:
 ```bash
-./higgs ../runcards/xspace-hadronic.yaml
+./higgs ../runcards/inputfile.yaml
 ```
 
 Everytime changes are made, the code can be re-compiled by running <kbd>ninja</kbd>
