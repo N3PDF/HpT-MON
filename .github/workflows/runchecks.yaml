@@ -6,11 +6,11 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    container: docker://dvcorg/cml-py3:latest
+    # container: docker://dvcorg/cml-py3:latest
     strategy:
       max-parallel: 1
       matrix:
-        python-version: [3.7, 3.8]
+        python-version: [3.7]
 
     steps:
     - name: Checkout
@@ -55,12 +55,12 @@ jobs:
         ./higgs ../runcards/higgsfo-lo.yaml
         ./higgs ../runcards/higgsfo-nlo.yaml
 
-    - name: Post results as PR comments
-      env:
-        repo_token: ${{ secrets.TWINE_USER }}
-      run: |
-        echo "### LO" >> report.md
-        cat higgspt_LO_gg_channel.dat >> report.md
-        echo "### NLO" >> report.md
-        cat higgspt_NLO_gg_channel.dat >> report.md
-        cml-send-comment report.md
+    # - name: Post results as PR comments
+    #   env:
+    #     repo_token: ${{ secrets.TWINE_USER }}
+    #   run: |
+    #     echo "### LO" >> report.md
+    #     cat higgspt_LO_gg_channel.dat >> report.md
+    #     echo "### NLO" >> report.md
+    #     cat higgspt_NLO_gg_channel.dat >> report.md
+    #     cml-send-comment report.md

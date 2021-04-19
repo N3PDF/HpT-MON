@@ -7,14 +7,14 @@ cubasrc=`ls $cuba/src`
 if [[ x$cubasrc == x ]];
 then
     rm -r Cuba-${version}
-    wget http://www.feynarts.de/cuba/${cuba}.tar.gz >& /dev/null
+    wget http://www.feynarts.de/cuba/${cuba}.tar.gz
     tar -xzf ${cuba}.tar.gz
     rm ${cuba}.tar.gz
 fi
 
 cd ${cuba}
 
-./configure >& cuba-logs.txt
+./configure
 if [[ $? != 0 ]]
 then
     echo "Error on configuration, check cuba-install.log!!"

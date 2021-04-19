@@ -20,7 +20,7 @@ cd $YAML
 echo "Configure package..."
 mkdir build
 cd build
-cmake .. >& yaml-install.log
+cmake ..
 if [[ $? != 0 ]]
 then
     echo "Error on compilation, check yaml-install.log!!"
@@ -28,7 +28,7 @@ then
 fi
 
 echo "Build package..."
-make >& yaml-install.log
+make
 if [[ $? != 0 ]]
 then
     echo "Error on build, check yaml-install.log!!"
