@@ -1,0 +1,70 @@
+name: Generate Partonic Mellin results at LO/NLO
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    # container: docker://dvcorg/cml-py3:latest
+    strategy:
+      max-parallel: 2
+      matrix:
+        python-version: [3.7]
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup conda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+        auto-update-conda: true
+
+    - name: Install yaml-cpp
+      shell: bash --login {0}
+      run: |
+        chmod +x install-yaml.sh
+        source install-yaml.sh
+
+    - name: Install lhapdf
+      shell: bash --login {0}
+      run: |
+        chmod +x install-lhapdf.sh
+        source install-lhapdf.sh
+
+    - name: Install cuba
+      shell: bash --login {0}
+      run: |
+        chmod +x install-cuba.sh
+        ./install-cuba.sh
+
+    - name: Install hqt-mon
+      shell: bash --login {0}
+      run: |
+        pip install -r requirements.txt
+        pip install meson ninja
+
+    - name: Install hqt-mon package & produce results
+      shell: bash --login {0}
+      run: |
+        meson setup builddir
+        cd builddir
+        meson compile
+        ./higgs ../runcards/higgsfo-lo.yaml
+        ./higgs ../runcards/higgsfo-nlo.yaml
+
+    - name: Post results as PR comments
+      env:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        echo "### LO" >> report.md
+        cat higgspt_LO_gg_channel.dat >> report.md
+        echo "### NLO" >> report.md
+        cat higgspt_NLO_gg_channel.dat >> report.md
+        cml-send-comment report.md

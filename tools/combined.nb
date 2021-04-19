@@ -1,0 +1,65 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 12.1' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      1778,         57]
+NotebookOptionsPosition[      1436,         43]
+NotebookOutlinePosition[      1827,         59]
+CellTagsIndexPosition[      1784,         56]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{
+    RowBox[{
+    "In", " ", "order", " ", "to", " ", "move", " ", "to", " ", "the", " ", 
+     "non"}], "-", 
+    RowBox[{"trivial", " ", "NLO", " ", "combination"}]}], ",", " ", 
+   RowBox[{
+   "each", " ", "resummation", " ", "has", " ", "to", " ", "be", " ", 
+    "compared", " ", "to", " ", "the", " ", "FO", " ", 
+    RowBox[{
+     RowBox[{"results", " ", "[", 
+      RowBox[{
+      "the", " ", "LO", " ", "part", " ", "is", " ", "somewhat", " ", 
+       "done"}], "]"}], ".", " ", "This"}], " ", "will", " ", "have", " ", 
+    "to", " ", "wait", " ", "for", " ", "the", " ", "Mellin", " ", "version", 
+    " ", "of", " ", "the", " ", "FO", " ", "implementation"}]}], 
+  "*)"}]], "Input",
+ CellChangeTimes->{{3.827176212729126*^9, 
+  3.8271763442063704`*^9}},ExpressionUUID->"6a5ea69b-1e69-4a81-a426-\
+4dabf4d1a5a0"]
+},
+WindowSize->{944, 1033},
+WindowMargins->{{6, Automatic}, {10, Automatic}},
+FrontEndVersion->"12.1 for Linux x86 (64-bit) (March 14, 2020)",
+StyleDefinitions->"Default.nb",
+ExpressionUUID->"b085f966-d2a5-41b1-b527-424120f182f4"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 874, 21, 75, "Input",ExpressionUUID->"6a5ea69b-1e69-4a81-a426-4dabf4d1a5a0"]
+}
+]
+*)
+
