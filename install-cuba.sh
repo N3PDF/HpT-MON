@@ -27,4 +27,6 @@ then
     echo "Error in build, check cuba-install.log!!"
     exit -1
 fi
-make install
+
+echo "Install cuba..."
+sudo make install
