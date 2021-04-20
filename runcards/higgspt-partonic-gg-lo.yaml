@@ -1,0 +1,46 @@
+sectype : partonic
+outfile : partonic
+
+# pdf name
+pdfname : PDF4LHC15_nnlo_100
+
+# order
+# 0<==>(LO)
+# 1<==>(NLO)
+order   : 0
+
+# pt bins
+ptmin   : 10
+ptmax   : 100
+ptbin   : 10
+
+# relevant scales in GeV
+mh      : 125		# mass of colorless final state
+mur     : 125 	    # renormalization scale
+muf     : 125		# factorization scale
+
+# 0<==>large top mass limit
+inorm   : 0
+
+# flavor number
+nf      : 5
+
+# ====================================  hadronic-only settings ====================================
+
+sroot   : 13000		# square root of the center of mass energy in GeV
+
+# rapidities
+y1      : -10
+y2      : +10
+
+# ====================================  partonic-only settings ====================================
+
+# Channel specific process
+# 0<==>gg
+# 1<==>gq
+# 2<==>qg
+# 3<==>qqb
+channel : 0
+
+# mellin moment
+N      : 3
