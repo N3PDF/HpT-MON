@@ -14,14 +14,14 @@ fi
 
 cd ${cuba}
 
-./configure
+./configure >& cuba-install.log
 if [[ $? != 0 ]]
 then
     echo "Error on configuration, check cuba-install.log!!"
     exit -1
 fi
 
-make >& cuba-logs.txt
+make >& cuba-install.log
 if [[ $? != 0 ]]
 then
     echo "Error in build, check cuba-install.log!!"

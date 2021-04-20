@@ -1,16 +1,24 @@
 name: Generate Partonic Mellin results at LO/NLO
 
-on: push
+on:
+  push:
+    branches: '**'
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
-    # container: docker://dvcorg/cml-py3:latest
     strategy:
       max-parallel: 1
       matrix:
         python-version: [3.7]
+    defaults:
+      run:
+        shell: bash --login {0}
+        working-directory: ./
 
     steps:
     - name: Checkout
@@ -22,13 +30,14 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Install meson & ninja
+      env:
+        repo_token: ${{ secrets.CML }}
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install meson ninja
 
     - name: Install dependencies & HpT-MON
-      shell: bash --login {0}
       run: |
 
         # make scripts executable
@@ -36,6 +45,7 @@ jobs:
         chmod +x install-lhapdf.sh
         chmod +x install-cuba.sh
 
+        # install dependencies
         echo "$PWD"
         echo "[+] Install YAML:"
         source install-yaml.sh
@@ -47,6 +57,7 @@ jobs:
         echo "[+] Install GSL:"
         sudo apt-get install libgsl-dev
         
+        # install hpt-mon
         echo "[+] Install HpT-MON:"
         meson setup builddir
         cd builddir
@@ -58,12 +69,24 @@ jobs:
         echo "[+] Run NLO results:"
         ./higgs ../runcards/higgsfo-nlo.yaml
 
-    # - name: Post results as PR comments
-    #   env:
-    #     repo_token: ${{ secrets.TWINE_USER }}
-    #   run: |
-    #     echo "### LO" >> report.md
-    #     cat higgspt_LO_gg_channel.dat >> report.md
-    #     echo "### NLO" >> report.md
-    #     cat higgspt_NLO_gg_channel.dat >> report.md
-    #     cml-send-comment report.md
+        mkdir -p results
+        echo "### LO results:" >> results/report.md
+        cat higgspt_LO_gg_channel.dat | tail -n+10 >> results/report.md
+        echo "### NLO results:" >> results/report.md
+        cat higgspt_NLO_gg_channel.dat | tail -n+10 >> results/report.md
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: artifact
+        path: builddir/results/
+
+    - uses: actions/download-artifact@v2
+      with:
+        name: artifact
+
+    - name: Post results as comment
+      uses: machine-learning-apps/pr-comment@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.TWINE_USER }}
+      with:
+        path: builddir/results/report.md

@@ -35,7 +35,7 @@ then
 fi
 
 echo "Compiling..."
-make
+make >& pdfinstall.log
 if [[ $? != 0 ]]
 then
     echo "Error on compilation, check pdfinstall.log"
@@ -43,7 +43,7 @@ then
 fi
 
 echo "Installing..."
-make install
+make install >& pdfintall.log
 if [[ $? != 0 ]]
 then
     echo "Error on installation, check pdfinstall.log"
