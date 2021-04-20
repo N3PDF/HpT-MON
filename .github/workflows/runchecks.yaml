@@ -66,10 +66,10 @@ jobs:
         pkg-config --libs yaml-cpp
         echo "[+] Run LO results:"
         ./higgs ../runcards/higgspt-partonic-gg-lo.yaml
-        ./higgs ../runcards/higgspt-hadronic-gg-lo.yaml
+        ./higgs ../runcards/higgspt-hadronic-lo.yaml
         echo "[+] Run NLO results:"
         ./higgs ../runcards/higgspt-partonic-gg-nlo.yaml
-        ./higgs ../runcards/higgspt-hadronic-gg-nlo.yaml
+        ./higgs ../runcards/higgspt-hadronic-nlo.yaml
 
         mkdir -p results
         echo "Bot report from $(git rev-parse --short HEAD)" >> results/report.md
@@ -78,10 +78,10 @@ jobs:
         echo '<details markdown="1">' >> results/report.md
         echo '<summary>Full hadronic</summary>' >> results/report.md
         echo ' ' >> results/report.md
-        echo "#### LO results (higgspt-hadronic-gg-lo.yaml):" >> results/report.md
-        cat hadronic_LO_gg_channel.dat | tail -n+10 >> results/report.md
-        echo "#### NLO results (higgspt-hadronic-gg-nlo.yaml):" >> results/report.md
-        cat hadronic_NLO_gg_channel.dat | tail -n+10 >> results/report.md
+        echo "#### LO results (higgspt-hadronic-lo.yaml):" >> results/report.md
+        cat hadronic_LO_all_channel.dat | tail -n+10 >> results/report.md
+        echo "#### NLO results (higgspt-hadronic-nlo.yaml):" >> results/report.md
+        cat hadronic_NLO_all_channel.dat | tail -n+10 >> results/report.md
         echo '</details>' >> results/report.md
         echo ' ' >> results/report.md
 
