@@ -87,6 +87,6 @@ jobs:
     - name: Post results as comment
       uses: machine-learning-apps/pr-comment@master
       env:
-        GITHUB_TOKEN: ${{ secrets.TWINE_USER }}
+        GITHUB_TOKEN: ${{ secrets.HPT_MON }}
       with:
         path: builddir/results/report.md
