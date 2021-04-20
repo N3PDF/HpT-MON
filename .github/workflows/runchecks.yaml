@@ -82,7 +82,7 @@ jobs:
         cat hadronic_LO_gg_channel.dat | tail -n+10 >> results/report.md
         echo "#### NLO results (higgspt-partonic-gg-nlo.yaml):" >> results/report.md
         cat hadronic_NLO_gg_channel.dat | tail -n+10 >> results/report.md
-        echo '</details>' >> results/report.
+        echo '</details>' >> results/report.md
         echo ' ' >> results/report.md
 
         # fetch Mellin partonic results
