@@ -20,7 +20,7 @@ cd $YAML
 echo "Configure package..."
 mkdir build
 cd build
-cmake .. >& yaml-install.log
+cmake ..
 if [[ $? != 0 ]]
 then
     echo "Error on compilation, check yaml-install.log!!"
@@ -28,12 +28,15 @@ then
 fi
 
 echo "Build package..."
-make >& yaml-install.log
+make
 if [[ $? != 0 ]]
 then
     echo "Error on build, check yaml-install.log!!"
     exit -1
 fi
+
+echo "Install yaml-cpp"
+sudo make install
 
 export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$(pwd)
 echo "Added $PWD to PKG-CONFIG path."

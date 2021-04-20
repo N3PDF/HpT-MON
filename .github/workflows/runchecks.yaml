@@ -2,7 +2,9 @@ name: Generate Partonic Mellin results at LO/NLO
 
 on:
   push:
-    branches: [ master ]
+    branches:
+      - '**'
+      - '!master'
   pull_request:
     branches: [ master ]
   workflow_dispatch:
@@ -11,61 +13,82 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    # container: docker://dvcorg/cml-py3:latest
     strategy:
-      max-parallel: 2
+      max-parallel: 1
       matrix:
         python-version: [3.7]
+    defaults:
+      run:
+        shell: bash --login {0}
+        working-directory: ./
 
     steps:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Setup conda
-      uses: conda-incubator/setup-miniconda@v2
+    - name: Setup Python & PIP
+      uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
-        auto-update-conda: true
 
-    - name: Install yaml-cpp
-      shell: bash --login {0}
+    - name: Install meson & ninja
+      env:
+        repo_token: ${{ secrets.CML }}
       run: |
-        chmod +x install-yaml.sh
-        source install-yaml.sh
-
-    - name: Install lhapdf
-      shell: bash --login {0}
-      run: |
-        chmod +x install-lhapdf.sh
-        source install-lhapdf.sh
-
-    - name: Install cuba
-      shell: bash --login {0}
-      run: |
-        chmod +x install-cuba.sh
-        ./install-cuba.sh
-
-    - name: Install hqt-mon
-      shell: bash --login {0}
-      run: |
+        python -m pip install --upgrade pip
         pip install -r requirements.txt
         pip install meson ninja
 
-    - name: Install hqt-mon package & produce results
-      shell: bash --login {0}
+    - name: Install dependencies & HpT-MON
       run: |
+
+        # make scripts executable
+        chmod +x install-yaml.sh
+        chmod +x install-lhapdf.sh
+        chmod +x install-cuba.sh
+
+        # install dependencies
+        echo "$PWD"
+        echo "[+] Install YAML:"
+        source install-yaml.sh
+        echo "[+] Install LHAPDF:"
+        echo "$PWD"
+        source install-lhapdf.sh
+        echo "[+] Install LHHAPDF:"
+        ./install-cuba.sh
+        echo "[+] Install GSL:"
+        sudo apt-get install libgsl-dev
+        
+        # install hpt-mon
+        echo "[+] Install HpT-MON:"
         meson setup builddir
         cd builddir
         meson compile
+
+        pkg-config --libs yaml-cpp
+        echo "[+] Run LO results:"
         ./higgs ../runcards/higgsfo-lo.yaml
+        echo "[+] Run NLO results:"
         ./higgs ../runcards/higgsfo-nlo.yaml
 
-    - name: Post results as PR comments
+        mkdir -p results
+        echo "### LO results (generated with higgsfo-lo.yaml):" >> results/report.md
+        cat higgspt_LO_gg_channel.dat | tail -n+10 >> results/report.md
+        echo "### NLO results: (generated with higgsfo-nlo.yaml)" >> results/report.md
+        cat higgspt_NLO_gg_channel.dat | tail -n+10 >> results/report.md
+
+    - uses: actions/upload-artifact@v2
+      with:
+        name: artifact
+        path: builddir/results/
+
+    - uses: actions/download-artifact@v2
+      with:
+        name: artifact
+
+    - name: Post results as comment
+      uses: machine-learning-apps/pr-comment@master
       env:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        echo "### LO" >> report.md
-        cat higgspt_LO_gg_channel.dat >> report.md
-        echo "### NLO" >> report.md
-        cat higgspt_NLO_gg_channel.dat >> report.md
-        cml-send-comment report.md
+        GITHUB_TOKEN: ${{ secrets.HPT_MON }}
+      with:
+        path: builddir/results/report.md
