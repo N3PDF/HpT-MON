@@ -2,7 +2,9 @@ name: Generate Partonic Mellin results at LO/NLO
 
 on:
   push:
-    branches: '**'
+    branches:
+      - '**'
+      - '!master'
   pull_request:
     branches: [ master ]
   workflow_dispatch:
@@ -70,9 +72,9 @@ jobs:
         ./higgs ../runcards/higgsfo-nlo.yaml
 
         mkdir -p results
-        echo "### LO results:" >> results/report.md
+        echo "### LO results (generated with higgsfo-lo.yaml):" >> results/report.md
         cat higgspt_LO_gg_channel.dat | tail -n+10 >> results/report.md
-        echo "### NLO results:" >> results/report.md
+        echo "### NLO results: (generated with higgsfo-nlo.yaml)" >> results/report.md
         cat higgspt_NLO_gg_channel.dat | tail -n+10 >> results/report.md
 
     - uses: actions/upload-artifact@v2
