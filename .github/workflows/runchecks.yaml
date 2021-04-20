@@ -90,9 +90,9 @@ jobs:
         echo '<summary>Mellin Partonic</summary>' >> results/report.md
         echo ' ' >> results/report.md
         echo "#### LO results (higgspt-partonic-gg-lo.yaml):" >> results/report.md
-        cat partonic_LO_gg_channel.dat | tail -n+10 >> results/report.md
+        cat partonic_LO_gg_channels.dat | tail -n+10 >> results/report.md
         echo "#### NLO results (higgspt-partonic-gg-nlo.yaml):" >> results/report.md
-        cat partonic_NLO_gg_channel.dat | tail -n+10 >> results/report.md
+        cat partonic_NLO_gg_channels.dat | tail -n+10 >> results/report.md
         echo '</details>' >> results/report.md
 
     - uses: actions/upload-artifact@v2
