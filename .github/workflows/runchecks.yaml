@@ -65,19 +65,19 @@ jobs:
 
         pkg-config --libs yaml-cpp
         echo "[+] Run LO results:"
-        ./higgs ../runcards/higgspt-partonic-gg-lo.yaml.yaml
-        ./higgs ../runcards/higgspt-hadronic-gg-lo.yaml.yaml
+        ./higgs ../runcards/higgspt-partonic-gg-lo.yaml
+        ./higgs ../runcards/higgspt-hadronic-gg-lo.yaml
         echo "[+] Run NLO results:"
-        ./higgs ../runcards/higgspt-partonic-gg-nlo.yaml.yaml
-        ./higgs ../runcards/higgspt-hadronic-gg-nlo.yaml.yaml
+        ./higgs ../runcards/higgspt-partonic-gg-nlo.yaml
+        ./higgs ../runcards/higgspt-hadronic-gg-nlo.yaml
 
         mkdir -p results
         echo "Bot report from $(git rev-parse --short HEAD)" >> results/report.md
 
         # fetch full hadronic results
         echo '<details markdown="1">' >> results/report.md
-        echo ' ' >> results/report.md
         echo '<summary style="font-weight:bold">Full hadronic</summary>' >> results/report.md
+        echo ' ' >> results/report.md
         echo "#### LO results (higgspt-partonic-gg-lo.yaml):" >> results/report.md
         cat hadronic_LO_gg_channel.dat | tail -n+10 >> results/report.md
         echo "#### NLO results (higgspt-partonic-gg-nlo.yaml):" >> results/report.md
@@ -87,8 +87,8 @@ jobs:
 
         # fetch Mellin partonic results
         echo '<details markdown="1">' >> results/report.md
-        echo ' ' >> results/report.md
         echo '<summary style="font-weight:bold">Mellin Partonic</summary>' >> results/report.md
+        echo ' ' >> results/report.md
         echo "#### LO results (higgspt-partonic-gg-lo.yaml):" >> results/report.md
         cat partonic_LO_gg_channel.dat | tail -n+10 >> results/report.md
         echo "#### NLO results (higgspt-partonic-gg-nlo.yaml):" >> results/report.md
