@@ -13,7 +13,20 @@ then
 fi
 
 cd ${cuba}
-# sed -i "s/MINSLICE 10/MINSLICE 1/" src/common/Parallel.c
-# export CFLAGS="-fPIC -fcommon"
-./configure
-make
+
+./configure >& cuba-install.log
+if [[ $? != 0 ]]
+then
+    echo "Error on configuration, check cuba-install.log!!"
+    exit -1
+fi
+
+make >& cuba-install.log
+if [[ $? != 0 ]]
+then
+    echo "Error in build, check cuba-install.log!!"
+    exit -1
+fi
+
+echo "Install cuba..."
+sudo make install

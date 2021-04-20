@@ -11,13 +11,13 @@ order   : 1
 
 # pt bins
 ptmin   : 10
-ptmax   : 100
+ptmax   : 200
 ptbin   : 10
 
 # relevant scales in GeV
 mh      : 125		# mass of colorless final state
-mur     : 165 	    # renormalization scale
-muf     : 165		# factorization scale
+mur     : 125 	    # renormalization scale
+muf     : 125		# factorization scale
 
 # 0<==>large top mass limit
 inorm   : 0
