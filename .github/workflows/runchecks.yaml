@@ -5,8 +5,6 @@ on:
     branches:
       - '**'
       - '!master'
-  pull_request:
-    branches: [ master ]
   workflow_dispatch:
 
 jobs:
@@ -67,15 +65,35 @@ jobs:
 
         pkg-config --libs yaml-cpp
         echo "[+] Run LO results:"
-        ./higgs ../runcards/higgsfo-lo.yaml
+        ./higgs ../runcards/higgspt-partonic-gg-lo.yaml
+        ./higgs ../runcards/higgspt-hadronic-lo.yaml
         echo "[+] Run NLO results:"
-        ./higgs ../runcards/higgsfo-nlo.yaml
+        ./higgs ../runcards/higgspt-partonic-gg-nlo.yaml
+        ./higgs ../runcards/higgspt-hadronic-nlo.yaml
 
         mkdir -p results
-        echo "### LO results (generated with higgsfo-lo.yaml):" >> results/report.md
-        cat higgspt_LO_gg_channel.dat | tail -n+10 >> results/report.md
-        echo "### NLO results: (generated with higgsfo-nlo.yaml)" >> results/report.md
-        cat higgspt_NLO_gg_channel.dat | tail -n+10 >> results/report.md
+        echo "Bot report from $(git rev-parse --short HEAD)" >> results/report.md
+
+        # fetch full hadronic results
+        echo '<details markdown="1">' >> results/report.md
+        echo '<summary>Full hadronic</summary>' >> results/report.md
+        echo ' ' >> results/report.md
+        echo "#### LO results (higgspt-hadronic-lo.yaml):" >> results/report.md
+        cat hadronic_LO_all_channels.dat | tail -n+10 >> results/report.md
+        echo "#### NLO results (higgspt-hadronic-nlo.yaml):" >> results/report.md
+        cat hadronic_NLO_all_channels.dat | tail -n+10 >> results/report.md
+        echo '</details>' >> results/report.md
+        echo ' ' >> results/report.md
+
+        # fetch Mellin partonic results
+        echo '<details markdown="1">' >> results/report.md
+        echo '<summary>Mellin Partonic</summary>' >> results/report.md
+        echo ' ' >> results/report.md
+        echo "#### LO results (higgspt-partonic-gg-lo.yaml):" >> results/report.md
+        cat partonic_LO_gg_channel.dat | tail -n+10 >> results/report.md
+        echo "#### NLO results (higgspt-partonic-gg-nlo.yaml):" >> results/report.md
+        cat partonic_NLO_gg_channel.dat | tail -n+10 >> results/report.md
+        echo '</details>' >> results/report.md
 
     - uses: actions/upload-artifact@v2
       with:

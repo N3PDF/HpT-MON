@@ -1,13 +1,5 @@
 #!/bin/bash
 
-: '
-The following script is a modification of
-https://github.com/stefano-camarda/DYTurbo/blob/master/install-lhapdf
-which contains some erros.
-
-The below can be written better ...
-'
-
 VERSION=6.2.3
 
 rm -r lhapdf6 >& /dev/null

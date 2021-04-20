@@ -18,13 +18,13 @@ In addition, `HpT-MON` relies on third party libraries:
 * [CUBA](http://www.feynarts.de/cuba/): for the Monte Carlo integration. If
   Cuba is not installed yet on the system, run the following:
   ```bash
-  ./install-cuba.sh
+  source install-cuba.sh
   ```
 * [YAML-cpp](https://github.com/jbeder/yaml-cpp): for the parsing of the input
   run card. If it is not installed in the system (make sure that duplicate
   installations are not present as this might results in an error), run:
   ```bash
-  ./install-yaml.sh
+  source install-yaml.sh
   ```
 
 #### Compile & run the code

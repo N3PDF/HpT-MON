@@ -1,5 +1,5 @@
-sectype : partonic
-outfile : higgspt
+sectype : hadronic
+outfile : hadronic
 
 # pdf name
 pdfname : PDF4LHC15_nnlo_100
@@ -11,7 +11,7 @@ order   : 0
 
 # pt bins
 ptmin   : 10
-ptmax   : 200
+ptmax   : 100
 ptbin   : 10
 
 # relevant scales in GeV
@@ -40,7 +40,7 @@ y2      : +10
 # 1<==>gq
 # 2<==>qg
 # 3<==>qqb
-channel : 0
+channel : 4
 
 # mellin moment
 N      : 3
