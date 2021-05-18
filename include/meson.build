@@ -9,5 +9,6 @@ install_headers(
     'higgsptpartonic.h',
     'hadronic.h',
     'integration.h'
-  ]
+  ],
+  subdir : 'higgs-fo'
 )

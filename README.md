@@ -42,7 +42,7 @@ the code, use one of the run cards in the `runcards` folder as follows:
 ./higgs ../runcards/inputfile.yaml
 ```
 
-Everytime changes are made, the code can be re-compiled by running <kbd>ninja</kbd>
+Every time changes are made, the code can be re-compiled by running `meson compile`
 inside the `builddir` directory.
 
 Finally, in case one wants to install the header files and library system-wide, this
@@ -50,3 +50,5 @@ can be done by running the following:
 ```bash
 meson install
 ```
+This, by default, will install the header files in `/{prefix}/include/higgs-fo` and
+add `higgsfo.pc` to the PKG path.
