@@ -1,0 +1,273 @@
+% ------------------------------------------------------------------------------
+% Mathematics Project Report Template
+% by Jon Shiach 2019
+% Manchester Metropolitan University
+% ------------------------------------------------------------------------------
+\documentclass[10pt]{report} 
+
+\usepackage{projectreport} 	% Formatting of the document
+
+\setlength{\parskip}{1em}
+\renewcommand{\baselinestretch}{1}
+
+\newcommand{\dd}{\mathrm{d}}
+
+%\newcommand{\citep}[1]{\cite{#1}} %becuase texmaker is annoying and autocompletes citep
+
+
+\bibliography{references}
+
+% ------------------------------------------------------------------------------
+% Document
+% ------------------------------------------------------------------------------
+\begin{document}
+
+\setcounter{page}{0}
+\pagenumbering{arabic}
+
+\chapter{\texttt{HpT-MON} implementation of G\&S}
+
+In the following short note, we discuss how we performed the numerical Mellin transform of the Glosser and Schmidt result~\cite{Glosser2003} as it is currently implemented in \texttt{HpT-MON}.
+
+\section{Relevant formulas in G\&S~\cite{Glosser2003}}
+
+The cross-section derived up to NLO (which is what we call $\mathcal{O}\left(\alpha_s^4\right)$) by Glosser and Schmidt~\cite{Glosser2003} is doubly differential in transverse momentum, $p_\perp$, and rapidity, $y_H$. The hadronic differential cross section for the process $h_1 h_2 \rightarrow H+X$ is 
+\begin{equation}
+\frac{d \sigma}{d p_{\perp}^{2} d y_{H}}=\sum_{i, j} \int_{0}^{1} d x_{a} d x_{b} f_{i / h_{1}}\left(x_{a}, \mu_{F}\right) f_{j / h_{2}}\left(x_{b}, \mu_{F}\right) \frac{d \hat{\sigma}_{i j}}{d p_{\perp}^{2} d y_{H}},
+\end{equation}
+where all symbols carry their usual meaning. The partonic cross sections for the different channels is then expanded as 
+\begin{equation}
+\frac{d \hat{\sigma}_{i j}}{d p_{\perp}^{2} d y_{H}}=\frac{\sigma_{0}}{\hat{s}}\left[\frac{\alpha_{s}\left(\mu_{R}\right)}{2 \pi} G_{i j}^{(1)}+\left(\frac{\alpha_{s}\left(\mu_{R}\right)}{2 \pi}\right)^{2} G_{i j}^{(2)}+\ldots\right],
+\label{eq:dsigmah/dpt2dyh=expanded}
+\end{equation}
+where
+\begin{equation}
+\sigma_{0}=\frac{\pi}{64}\left(\frac{\alpha_{s}\left(\mu_{R}\right)}{3 \pi v}\right)^{2}.
+\end{equation}
+
+
+\subsection{Leading Order}
+The leading order result is given by 
+\begin{equation}
+G_{i j}^{(1)}=g_{i j} \delta\left(Q^{2}\right)
+\end{equation}
+where
+\begin{equation}
+\begin{array}{l}
+g_{g g}=N_{c}\left(\frac{m_{H}^{8}+\hat{s}^{4}+\hat{t}^{4}+\hat{u}^{4}}{\hat{u} \hat{t} \hat{s}}\right) \\
+g_{g q}=C_{F}\left(\frac{\hat{t}^{2}+\hat{s}^{2}}{-\hat{u}}\right) \\
+g_{q \bar{q}}=2 C_{F}^{2}\left(\frac{\hat{t}^{2}+\hat{u}^{2}}{\hat{s}}\right)
+\end{array},
+\end{equation}
+and $g_{q g}$ can be obtained from $g_{g q}$ through $\hat{u} \leftrightarrow \hat{t}$. Also, the quark and antiquark in the $g_{q \bar{q}}$ must be of the same flavour at LO. This is of course not relevant \textit{yet}, since for now we focus our attention on the gluon-gluon channel.
+
+At leading order we find perfect agreement between \texttt{HpT-MON} and the LO fixed order as for example given in Mueslli's thesis~\citep{Muselli2017a}.
+
+
+\subsection{Next-to Leading order}
+
+The NLO result is separated into a `singular' and a `regular' part:
+\begin{equation}
+G_{i j}^{(2)}=G_{i j}^{(\mathrm{2s})}+G_{i j}^{(2 \mathrm{R}, \mathrm{ns})},
+\end{equation}
+where the singular terms, $G_{i j}^{(\mathrm{2s})}$, contain the sum of the virtual, the Altarelli-Parisi and the `singular' real contributions. This term contains the dominant contributions to the total cross section. In the small $p_\perp$ limit they contain all of the contributions enhanced by $\left(\alpha_{s}^{2} / p_{\perp}^{2}\right) \alpha_{s}^{2} \ln ^{m}\left(m_{H}^{2} / p_{\perp}^{2}\right)$, with $m=1,2,3$. The `nonsigular' terms $G_{i j}^{(2 \mathrm{R}, \mathrm{ns})}$ correspond to very long expressions, and since they are subleading anyway, we will not give them explicitly here and instead focus our attention on $G_{i j}^{(\mathrm{2s})}$.
+
+For the gluon-gluon channel the singular term is
+\begin{equation}
+\begin{aligned}
+G_{g g}^{(\mathrm{2s})}&=\delta\left(Q^{2}\right)\left\{\left(\Delta+\delta+N_{c} U\right) g_{g g}\right.\\
+&\left.+\left(N_{c}-n_{f}\right) \frac{N_{c}}{3}\left[\left(m_{H}^{4} / \hat{s}\right)+\left(m_{H}^{4} / \hat{t}\right)+\left(m_{H}^{4} / \hat{u}\right)+m_{H}^{2}\right]\right\}+\{\\
+&\left(\frac{1}{-\hat{t}}\right)\left[-P_{g g}\left(z_{a}\right) \ln \frac{\mu_{F}^{2} z_{a}}{(-\hat{t})}+p_{g g}\left(z_{a}\right)\left(\frac{\ln 1-z_{a}}{1-z_{a}}\right)_{+}\right] g_{g g, a}\left(z_{a}\right) \\
+&+\left(\frac{1}{-\hat{t}}\right)\left[-2 n_{f} P_{q g}\left(z_{a}\right) \ln \frac{\mu_{F}^{2}}{Q^{2}}+2 n_{f} C_{q g}^{\epsilon}\left(z_{a}\right)\right] g_{q g, a}\left(z_{a}\right) \\
+&+\left(\frac{z_{a}}{-\hat{t}}\right)\left(\left(\frac{\ln 1-z_{a}}{1-z_{a}}\right)_{+}-\frac{\ln \left(Q_{\perp}^{2} z_{a} /(-\hat{t})\right)}{\left(1-z_{a}\right)_{+}}\right) \\
+&\times \frac{N_{c}^{2}}{2}\left[\frac{\left(m_{H}^{8}+\hat{s}^{4}+Q^{8}+\hat{u}^{4}+\hat{t}^{4}\right)+z_{a} z_{b}\left(m_{H}^{8}+\hat{s}^{4}+Q^{8}+\left(\hat{u} / z_{b}\right)^{4}+\left(\hat{t} / z_{a}\right)^{4}\right)}{\hat{s} \hat{u} \hat{t}}\right] \\
+&-\left(\frac{z_{a}}{-\hat{t}}\right)\left(\frac{1}{1-z_{a}}\right)_{+} \frac{\beta_{0}}{2} N_{c}\left(\frac{m_{H}^{8}+\hat{s}^{4}+z_{a} z_{b}\left(\left(\hat{u} / z_{b}\right)^{4}+\left(\hat{t} / z_{a}\right)^{4}\right)}{\hat{s} \hat{u} \hat{t}}\right) \\
+&+[(\hat{t}, a) \leftrightarrow(\hat{u}, b)]\} \\
+&+N_{c}^{2}\left[\frac{\left(m_{H}^{8}+\hat{s}^{4}+Q^{8}+\left(\hat{u} / z_{b}\right)^{4}+\left(\hat{t} / z_{a}\right)^{4}\right)\left(Q^{2}+Q_{\perp}^{2}\right)}{\hat{s}^{2} Q^{2} Q_{\perp}^{2}}\right.\\
+&\left.+\frac{2 m_{H}^{4}\left(\left(m_{H}^{2}-\hat{t}\right)^{4}+\left(m_{H}^{2}-\hat{u}\right)^{4}+\hat{u}^{4}+\hat{t}^{4}\right)}{\hat{s} \hat{u} \hat{t}\left(m_{H}^{2}-\hat{u}\right)\left(m_{H}^{2}-\hat{t}\right)}\right] \frac{1}{p_{\perp}^{2}} \ln \frac{p_{\perp}^{2}}{Q_{\perp}^{2}},
+\end{aligned}
+\end{equation}
+where 
+\begin{equation}
+\begin{array}{l}
+P_{g g}(z)=N_{c}\left[\frac{1+z^{4}+(1-z)^{4}}{(1-z)_{+} z}\right]+\beta_{0} \delta(1-z) \\
+P_{q g}(z)=\frac{1}{2}\left[z^{2}+(1-z)^{2}\right]
+\end{array},
+\end{equation}
+\begin{equation}
+p_{g g}(z)=(1-z) P_{g g}=N_{c}\left[\frac{1+z^{4}+(1-z)^{4}}{z}\right],
+\end{equation}
+\begin{equation}
+C_{q g}^{\epsilon}(z)=z(1-z),
+\end{equation}
+\begin{equation}
+\delta=\frac{3 \beta_{0}}{2}\left(\ln \frac{\mu_{R}^{2}}{-\hat{t}}+\ln \frac{\mu_{R}^{2}}{-\hat{u}}\right)+\left(\frac{67}{18} N_{c}-\frac{5}{9} n_{f}\right),
+\end{equation}
+and finally
+\begin{equation}
+\begin{aligned}
+U=& \frac{1}{2} \ln ^{2} \frac{-\hat{u}}{-\hat{t}}+\frac{\pi^{2}}{3} \\
+&-\ln \frac{\hat{s}}{m_{H}^{2}} \ln \frac{-\hat{t}}{m_{H}^{2}}-\ln \frac{\hat{s}}{m_{H}^{2}} \ln \frac{-\hat{u}}{m_{H}^{2}}-\ln \frac{-\hat{t}}{m_{H}^{2}} \ln \frac{-\hat{u}}{m_{H}^{2}} \\
+&+\ln ^{2} \frac{m_{H}^{2}}{\hat{s}}+\ln ^{2} \frac{m_{H}^{2}}{m_{H}^{2}-\hat{t}}+\ln ^{2} \frac{m_{H}^{2}}{m_{H}^{2}-\hat{u}} \\
+&+2 \operatorname{Li}_{2}\left(\frac{\hat{s}-m_{H}^{2}}{\hat{s}}\right)+2 \operatorname{Li}_{2}\left(\frac{m_{H}^{2}}{m_{H}^{2}-\hat{t}}\right)+2 \operatorname{Li}_{2}\left(\frac{m_{H}^{2}}{m_{H}^{2}-\hat{u}}\right)
+\end{aligned}.
+\end{equation}
+
+Note that $P_{g g}(z)$ contains a plus distribution. 
+
+\subsection{Small-$p_\perp$ limit}
+In Sec.~5 of their paper Glosser and Schmidt show that in the small $p_\perp$ limit their solution agrees with that of the resummed result by Collins, Soper, and Sterman~\citep{Collins1985}. \textit{We expect this still to be the case in Mellin-space. }
+
+
+
+\section{Integrating over rapidity}
+
+We would like to compare the Fixed Order result of Glosser and Schmidt to resummed cross sections in the small $p_\perp$ and threshold limits in Mellin space. Here we use an integration variable that has also been used by Ravidran, Smith and van Neerven~\citep{Ravindran2002} and Rota~\citep{Rota2020} (fixing some typos along the way, which can explain any disagreements between these notes and those two references).
+
+\subsection{Defining the integration variable}
+The integral we need to solve to integrate over rapidity is 
+\begin{equation}
+\frac{d \hat{\sigma}}{d p_{\perp}^{2}}=\int_{y_{H \min }}^{y_{H \max }} \frac{d  \hat{\sigma}}{d p_{\perp}^{2} d y_H} d y_H.
+\end{equation}
+
+
+To deal with the $\delta(Q^2)$ terms it is most convenient to write the integration variable proportional to $Q^2$. Another option would be to keep $y_\mathrm{H}$ as the integration variable, and instead change the variable that is the argument of the delta functions. This will then result in the same overall factor that is now the Jacobian. The algorithm used for integration samples in the range 0 to 1. Any integration interval can trivially be rescaled such that the integration variable is integrated in this range, nevertheless we will do so explicitly in these notes. 
+
+The relation between $y_H$ and $Q^2$ is
+\begin{equation}
+\sinh y_H=\pm \frac{\sqrt{\left(\hat{s}+m_H^{2}-Q^{2}\right)^{2}-4 s \left(p_{\perp}^{2}+m_H^{2}\right)^{2}}}{2 \sqrt{\hat{s}} \left(p_{\perp}^{2}+m_H^{2}\right)},
+\label{eq:sinhy=}
+\end{equation}
+or inversely 
+\begin{equation}
+Q^2 = m_H^2+\hat{s}-\sqrt{4 \left(p_{\perp}^{2}+m_H^{2}\right)^2 \hat{s} + 4 \left(p_{\perp}^{2}+m_H^{2}\right) {\hat{s}} \sinh^2(y) }.
+\label{eq:Q2(y)=}
+\end{equation}
+thus the Jacobian corresponding to this transformation of the integration variable (for both the + and the - relation in \eqref{eq:sinhy=}) is 
+\begin{equation}
+\begin{aligned}
+J_{y \rightarrow Q^{2}} &=\frac{d y_H}{\dd Q^{2}}=\left(-2m_{\perp} \sqrt{\hat{s}}\sinh(y_H)\right)^{-1} \\
+&=\frac{1}{\sqrt{\left(\hat{s}+m_H^{2}-Q^{2}\right)^{2}-4 \hat{s}\left(p_{\perp}^{2}+m_H^{2}\right)}}
+\end{aligned},
+\end{equation}
+where to go from the first to the second line, we used \eqref{eq:sinhy=}.
+
+Then, to ensure an integration domain between 0 and 1, we define the integration variable
+\begin{equation}
+q = \frac{Q^2}{Q^2_{\max}},
+\label{eq:q=Q2/Q2max}
+\end{equation}
+where 
+\begin{equation}
+Q_{\max }^{2}=m_H^2+\hat{s}-2 \sqrt{\hat{s}\left(p_{\perp}^{2}+m_H^{2}\right)},
+\end{equation}
+which corresponds to $y_H=0$ in \eqref{eq:Q2(y)=}.
+
+Finally, the Jacobian corresponding to the transformation of the integration variable from $y_H$ to $q$ is 
+\begin{equation}
+J_{y \rightarrow q} =\frac{d y_H}{d q}=\frac{Q^2 _\mathrm{max}}{\sqrt{\left(\hat{s}+m_H^{2}-Q^{2}\right)^{2}-4 \hat{s}\left(p_{\perp}^{2}+m_H^{2}\right)}}
+\label{eq:jacytoq}
+\end{equation}
+
+Now, if we again take the expression of the expanded, doubly differential, partonic cross section, which was our starting point, we can write the integration over rapidity as 
+\begin{equation}
+\begin{aligned}
+\frac{d \hat{\sigma}_{i j}}{d p_{\perp}^{2} } &= \int_0^1 dq   J_{y \rightarrow q} \left( \frac{d \hat{\sigma}_{i j}}{d p_{\perp}^{2} d y_{H}}\left(\hat{u},\hat{t}\right) + \frac{d \hat{\sigma}_{i j}}{d p_{\perp}^{2} d y_{H}}\left(\hat{t},\hat{u}\right) \right) \\
+&= \int_0^1 dq 2 J_{y \rightarrow q} \frac{d \hat{\sigma}_{i j}}{d p_{\perp}^{2} d y_{H}} \\
+&= \int_0^1 dq 2 J_{y \rightarrow q}\frac{\sigma_{0}}{\hat{s}}\left[\frac{\alpha_{s}\left(\mu_{R}\right)}{2 \pi} G_{i j}^{(1)}+\left(\frac{\alpha_{s}\left(\mu_{R}\right)}{2 \pi}\right)^{2} G_{i j}^{(2)}+\ldots\right].
+\end{aligned}.
+\end{equation}
+Here we are able to make the simplification we do upon going from the first to the second line because the partonic cross section of the gluon-gluon channel is symmetric in $\hat{u}$ and $\hat{t}$. While this is also true for the quark-antiquark channel (Or so it seems, for the $G$ term at first glance) is not the case for the quark-gluon channel. This means that once we are going to include more than the gluon-gluon channel in \texttt{HpT-MON}, we will have to include the equivalent of \textit{ditrcross} for the calculaion of the partonic cross section.
+
+
+Here the factor two corresponds to the two possible ways of writing $y_\mathrm{H}$ in terms of $Q^2$. Generally this would involve the sum of two different cross sections, $\sigma(\hat{u},\hat{t})+\sigma(\hat{t},\hat{u})$. However, as shown in \eqref{eq:utpm=}, $\hat{u}$ and 
+
+Since we can write $\hat{t}$ and $\hat{u}$ in terms of $Q^2$ (which is directly related to our integration variable $q$ as per \eqref{eq:q=Q2/Q2max}) and $p_\perp$ as
+\begin{equation}
+\begin{array}{l}
+\hat{t}_\pm=\frac{1}{2}\left[Q^{2}+m_H^{2}-\hat{s}\pm\sqrt{\left(\hat{s}+m_H^{2}-Q^{2}\right)^{2}-4 \hat{s}\left(p_{\perp}^{2}+m_H^{2}\right)}\right], \\
+\hat{u}_\pm=\frac{1}{2}\left[Q^{2}+m_H^{2}-\hat{s}\mp\sqrt{\left(\hat{s}+m_H^{2}-Q^{2}\right)^{2}-4 \hat{s}\left(p_{\perp}^{2}+m_H^{2}\right)}\right],
+\end{array}
+\label{eq:utpm=}
+\end{equation}
+where the $\pm$ here corresponds to that in \eqref{eq:sinhy=} for $\sinh(y_H)$, the integration of the LO part (or really any term that doesn't contain a plus distribution and is multiplied by a $\delta(Q^2)$) is now trivial. Since we are for the moment only interested in the gluon-gluon channel for $y_H$ symmetric around $y_H=0$, we do not need to worry about the $\pm$ and for now will just stick with the `plus' option. In the \texttt{HqT} code these two options are separated in the \textit{distr} and \textit{distrcross} functions. For now \texttt{HpT-MON} only contains the \textit{distr} variant.
+
+\subsection{Plus distributions in terms of $q$}
+\label{subsec:plusintermsofq}
+At the moment the analytic expressions implemented in \texttt{HpT-MON} relies on rewriting the plus distributions $\left( \frac{\log ^k (1-z) }{ 1-z } \right)_+$ for $k=0$ and $k=1$, as appear in G\&S, in terms of the integration variable $q$. Alternatively, one might write the integration in terms of $z$  (I haven't really considered this yet though I believe it to be doable). This has been done by Rota in appendix A.2 of his thesis, and the results are 
+\begin{equation}
+\frac{z_{t}}{-t}\left(\frac{1}{1-z_{t}}\right)_{+}=\frac{1}{Q_{\max }^{2}}\left\{\left[\frac{1}{q}\right]_{+}+\delta(q) \ln \frac{Q_{\max }^{2}}{-t}\right\},
+\label{eq:order0plus}
+\end{equation}
+and
+\begin{equation}
+\begin{aligned}
+\frac{z_{t}}{-t}\left(\frac{\ln \left(1-z_{t}\right)}{1-z_{t}}\right)_{+}=\frac{1}{Q_{\max }^{2}}\left\{\left[\frac{\ln (q)}{q}\right]_{+}+\ln \frac{Q_{\max }^{2} z_{t}}{-t}\left[\frac{1}{q}\right]_{+}+\frac{\delta(q)}{2} \ln ^{2} \frac{Q_{\max }^{2}}{-t}\right\}
+\end{aligned},
+\label{eq:order1plus}
+\end{equation}
+where the square brackets indicate that the pole is at $q=0$ as opposed to the pole being at $z=1$ as denoted by the round brackets. 
+
+
+\subsection{Performing the integration over $y_\mathrm{H}$}
+In performing the integration we can distinguish three groups of terms. The first are those proportional to $\delta(Q^2)$, which are implemented in the \textit{distr} class in \texttt{HpT-MON}. For these terms we do not need to perform a numerical integration, since an integration of $\delta(Q^2)$ is proportional to an integration of $\delta(y_\mathrm{H})$. 
+
+The second group are terms proportional to a plus distribution of the form $\left( \frac{\log ^k (1-z) }{ 1-z } \right)_+$, here we will make us of the result of Sec.~\ref{subsec:plusintermsofq}. In \texttt{HpT-MON} these are the terms proportional to \texttt{a1,b1,a10,b10}.
+
+Then there are the `other terms', this includes some terms in $G_{gg}^{(2s)}$ which in \texttt{HpT-MON} are the terms proportional to \texttt{c1} terms. Another term that falls under the label of `other terms' are the nonsingular terms, in \texttt{HpT-MON} these are the terms proportional to \texttt{nonsingular}. So for the case of the gluon, to which we limit ourselves in these notes, this is the term $G_{gg}^{(2R,ns)}$ of Eq.~(A.1) in G\&S. We will not write out the term explicitly due to it's length and the fact that it's contribution to the total cross section is insignificant in both the small-pt and threshold limits.
+
+
+\subsubsection{Terms multiplied by $\delta(Q^2)$}
+As stated before, there is no need to perform this integration over $y_\mathrm{H}$ numerically. Using the Jacobian of \eqref{eq:jacytoq} we can write 
+\begin{equation}
+\begin{aligned}
+\frac{d \hat{\sigma}_{i j}^{\delta(Q^2)}}{d p_{\perp}^{2} } 
+&= \int_0^1 dq 2 J_{y \rightarrow q} \frac{d \hat{\sigma}_{i j}^{\delta(Q^2)}}{d p_{\perp}^{2} d y_{H}} \\
+&= 2 J_{y \rightarrow q} \frac{d \hat{\sigma}_{i j}^{\delta(Q^2)}}{d p_{\perp}^{2} d y_{H}} \Bigg|_{Q^2=q=0} \\
+\end{aligned},
+\end{equation}
+where the superscript $\delta(Q^2)$ is used to denote only the terms of the cross section multiplied by $\delta(Q^2)$. This means the full LO expression, as well as part of the NLO term. 
+
+
+\subsubsection{Terms multiplied by plus distribution}
+Since for these terms, as opposed to the terms above, we do not have a degree of freedom restricted by a delta function, we will need to perform a numerical integration to get rid of the $y_\mathrm{H}$ dependence of the cross section. This is done by simply replacing the plus distributions of the form $\left( \frac{\log ^k (1-z) }{ 1-z } \right)_+$ that appear in G\&S by plus distributions in terms of $q$ by using the relations of \eqref{eq:order0plus} and \eqref{eq:order1plus}.
+
+Analytically this is simply a matter of replacing one expression by another and calling it a day, however implementing the plus distribution as part of a numerical integration requires a little bit of care. Namely, if we consider that an integral where the integrand is a plus distribution is written as 
+\begin{equation}
+\int_{0}^{1} dz (f(z))_{+} g(z) = \int_{0}^{1} dz f(z)[g(z)-g(1)],
+\end{equation}
+we realize that we will have to calculate both $g(z)$ and $g(1)$. In the \texttt{HpT-MON} implementation the equivalent of $g(z)$ are the terms proportional to \texttt{a1} and \texttt{b1}, while the equivalent of $g(1)$ are the terms proportional to \texttt{a10} and \texttt{b10}.
+
+
+\subsubsection{Other terms}
+The implementation in \texttt{HpT-MON} of the numerical integration of the `other terms' is again relatively straightforward. Here we of course still need to consider the Jacobian \eqref{eq:jacytoq}, but that's all there is to the implementation of the integration routine. 
+
+I expect that upon looking at the code while having read these notes (or keeping them open on one side of the monitor) will make it understandable what different part of the \texttt{HpT-MON} code represent and what the thought process was behind the implementation. 
+
+
+\subsection{Should we use $z$ as the integration variable for the non $\delta(Q^2)$ terms?}
+Currently looking into this, in the hope of avoiding rewriting the plus distributions. 
+
+
+\section{The Mellin transform}
+Having integrated out the dependence on rapidity, we still want to perform the Mellin transform 
+\begin{equation}
+\frac{d \hat{\sigma}_{i j}}{d p_\perp^2}\left(N\right)=\int_{0}^{1} d x x^{N-1} \frac{d \hat{\sigma}_{i j}}{d p_\perp^2}\left(x\right).
+\end{equation}
+This is implemented in \texttt{HpT-MON} by simply making $x=\frac{m_\mathrm{H}}{\hat{s}}$ an integration variable and multiplying the cross section by $x^{N-1}$.
+
+
+
+
+
+
+
+
+
+% ------------------------------------------------------------------------------
+% Reference list
+% ------------------------------------------------------------------------------
+
+\printbibliography
+
+\end{document}
