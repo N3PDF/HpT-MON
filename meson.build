@@ -36,6 +36,6 @@ pkg_mod = import('pkgconfig')
 pkg_mod.generate(
   libraries : higgslib,
   version : '1.0.0',
-  name : 'ligbiggs',
+  name : 'higgsfo',
   description : 'A library for higgs FO calculations.'
 )
