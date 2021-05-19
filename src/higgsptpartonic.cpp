@@ -696,7 +696,7 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1, double 
         a1 += (1./(-th)*pgg(za)*gg0(sh,th,uh,MH2)+(-za/th)*big1);
         b1 += (1./th*pgg(za)*log(-MUF2*za/th)*gg0(sh,th,uh,MH2) \
                 +za/th*big1*log((QQ2+pt*pt)*za/(-th))+za/th*big2);
-        c1 += (1/(-th)*(-2*NF*pqg(za)*log(MUF2/QQ2)+2*NF*za*(1-za)) \
+        c1 += (1/(-th)*(-2*NF*Pqg(za)*log(MUF2/QQ2)+2*NF*za*(1-za)) \
                 *qg0(sh,th,uh)+0.5*big3);
         nonsingular += 0.5*REGgg;
     }
@@ -706,7 +706,7 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1, double 
         a1 += (1./(-th)*pgg(za)*gq0(sh,th,uh)+(-za/th)*big4);
         b1 += (1./th*pgg(za)*log(-MUF2*za/th)*gq0(sh,th,uh) \
                 +za/th*big4*log((QQ2+pt*pt)*za/(-th)));
-        c1 += (1/(-th)*(-pqg(za)*log(MUF2/QQ2)+za*(1-za)) \
+        c1 += (1/(-th)*(-Pqg(za)*log(MUF2/QQ2)+za*(1-za)) \
                 *qqb0(sh,th,uh)+0.5*big5);
         nonsingular += 0.5*REGgq;
     }
@@ -717,7 +717,7 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1, double 
         b1 += (1./th*pqq(za)*log(-MUF2*za/th)*qg0(sh,th,uh) \
             +za/th*8./3.*(std::pow(uh,2)+std::pow(sh,2))/(-th));
         c1 += (-1/th*(4./3.*(1-za)*qg0(sh,th,uh)\
-                +(-pgq(za)*log(MUF2/QQ2)+4/3*za)*gg0(sh,th,uh,MH2)) \
+                +(-Pgq(za)*log(MUF2/QQ2)+4/3*za)*gg0(sh,th,uh,MH2)) \
                 +0.5*big5);
         nonsingular += 0.5*REGqg;
     }
@@ -732,7 +732,7 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1, double 
             *(std::pow(th,2)+std::pow(uh,2)+std::pow(QQ2-th,2) \
             +std::pow(QQ2-uh,2))/sh+za/th*16./9. \
             *beta0*(std::pow(uh,2)+std::pow(th,2))/sh);
-        c1 += (-1/th*(4./3*(1-za)*qqb0(sh,th,uh)+(-pgq(za) \
+        c1 += (-1/th*(4./3*(1-za)*qqb0(sh,th,uh)+(-Pgq(za) \
             *log(MUF2/QQ2)+4./3*za)*gq0(sh,th,uh))+16./9 \
             *(std::pow(sh-QQ2,2)+std::pow(uh+th-2*QQ2,2))/sh \
             *log(std::pow(pt,2)/(std::pow(pt,2)+QQ2))/std::pow(pt,2));
@@ -741,7 +741,7 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1, double 
     break;
     case(4):    // qQ, qQb and qq - channel (same flavours)
     {
-        c1 += 3.*(-1./th*(-pgq(za)*log(MUF2/QQ2)+4./3*za)*gq0(sh,th,uh) \
+        c1 += 3.*(-1./th*(-Pgq(za)*log(MUF2/QQ2)+4./3*za)*gq0(sh,th,uh) \
             +16./9*(std::pow(sh-QQ2,2)+std::pow(uh+th-2*QQ2,2))/sh \
             *log(std::pow(pt,2)/(std::pow(pt,2)+QQ2))/std::pow(pt,2));
         nonsingular += 3.*0.5*REGqqpb;
