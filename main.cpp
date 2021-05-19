@@ -86,7 +86,8 @@ int main(int argc, char* argv[]) {
 
     // Factors for Born cross-section
     double factor;
-    double gf = 1.16637e-5;                         // Fermi Constant
+    double gf = 1.16637e-5;                         // Fermi Constant, same as HqT but according to 
+                                                    // PDG this should be 1.16638e-5
     double gevpb = 3.8937966e8;                     // GeV to pb
 
     if (inorm == 1) {
@@ -104,6 +105,7 @@ int main(int argc, char* argv[]) {
     LHAPDF::initPDFSetByName(pdfname);
     double _as = LHAPDF::alphasPDF(_mur);
     double _sigma0 = factor*gevpb*std::pow(_as,2);
+    std::cout << std::setprecision(15) << _as << std::endl;
 
     // Define parameters
     PhysParams physparam;
