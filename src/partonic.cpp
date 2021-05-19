@@ -30,7 +30,7 @@ CrossHiggs::CrossHiggs(
     NF = param.nf;
     ORD = order;
     SIGMA0 = param.sigma0;
-    aass = param.alphas/M_PI;
+    aass = param.alphas;
     MH2  = std::pow(param.mh, 2);
 }
 
@@ -55,7 +55,7 @@ double CrossHiggs::ExtractDeltaPartonic(
         double nn,
         double zz
 ) {
-    double xsection = higgs.deltapartonic(pt,nn,zz)*SIGMA0*(aass/2.);
+    double xsection = higgs.deltapartonic(pt,nn,zz)*SIGMA0*(aass/(2.*M_PI));
     return xsection;
 }
 
@@ -83,7 +83,7 @@ double CrossHiggs::ExtractDistrPartonic(
     //       threshold expanded and full LO.
     // TODO: also add a `cross' distribution to accomodate for the qg-channels
     double distres = 2.*higgs.distrpartonic(pt,nn,zz1,zz2);
-    double xsection = SIGMA0*(aass/2.)*distres;
+    double xsection = SIGMA0*(aass/(2.*M_PI))*distres;
     return xsection;
 }
 
@@ -138,8 +138,8 @@ std::vector<double> CrossHiggs::partonichiggsdpt(
                 &finalparams,
                 &disterr);
 
-        distres *= aass/2.;
-        disterr *= aass/2.;
+        distres *= aass/(2.*M_PI);
+        disterr *= aass/(2.*M_PI);
     }
 
     results.push_back(deltres+distres);
