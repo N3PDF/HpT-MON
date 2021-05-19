@@ -19,8 +19,6 @@
 
 #include "./higgsptpartonic.h"
 
-#include <unistd.h>
-
 
 HiggsDpTpartonic::HiggsDpTpartonic(
         int order,
@@ -652,26 +650,22 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1, double 
     ////////////////////////////////////////////////////////////////
     double nonsingular=0, a1=0, b1=0, c1=0, a10=0, b10=0;
 
-    // qq is an integration variable used to integrate out rapidity
-    double qq = zz1;
-    // xx is Q²/sh 
-    double xx = zz2;
+    double qq = zz1;    // qq = QQ2/QQ2max is an integration variable used to integrate out rapidity
+    double xx = zz2;    // xx = Q²/sh 
 
     if (xx<1e-8 || xx>1.-1e-8) {
         return 0.;
     }
 
-    // write tauh in terms of the integration variable xx
     double xi = (pt*pt/MH2);
     double tauh = xx*std::pow(sqrt(1+xi)-sqrt(xi),2);
     double sh = MH2/tauh;
-
-    double mt2 = pt*pt+MH2;    // transverse mass    
+    double mt2 = pt*pt+MH2;
     double QQ2max = (MH2+sh-2*sqrt(sh*mt2));
     double QQ2 = qq*QQ2max;
     double uh = 0.5*(QQ2+MH2-sh-sqrt(std::pow(sh+MH2-QQ2,2)-4.*sh*mt2));
     double th = 0.5*(QQ2+MH2-sh+sqrt(std::pow(sh+MH2-QQ2,2)-4.*sh*mt2));
-    double jac1 = QQ2max/sqrt(std::pow(sh+MH2-QQ2,2)-4.*sh*mt2);
+    double jac1 = QQ2max/sqrt(std::pow(sh+MH2-QQ2,2)-4.*sh*mt2); // Jacobian
     double za = -th/(QQ2-th);
 
     // `a1factor' and `b1factor' are the functions inside the plus distributions
@@ -802,7 +796,6 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1, double 
     double cfinal = c1*jac1;
 
     double nonsingularfinal = nonsingular*jac1;
-    // nonsingularfinal =0.;
 
     double result = afinal+bfinal+cfinal+nonsingularfinal;
 
@@ -812,11 +805,11 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1, double 
     // dsigma/pt² to dsigma/dpt
     result *= 2.*pt;
 
-    // why do we need this? 
-    result *= tauh/MH2;
-    result *= 2.;
+    // 1/sh as in Eq. 2.4 of G&S
+    result *= 1./sh;
 
-    // std::cout << nonsingularfinal << std::endl;
+    // why do we need this? 
+    result *= 2.;
 
     return result;
 }
