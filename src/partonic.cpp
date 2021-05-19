@@ -78,7 +78,10 @@ double CrossHiggs::ExtractDistrPartonic(
         double zz1,
         double zz2
 ) {
-    // The factor two is here to account for (th,a)<->(uh,b)
+    // A factor two is here to account for (th,a)<->(uh,b)
+    // TODO: figure out why we also need a factor 2 for the  jacobian, to get good agreement with 
+    //       threshold expanded and full LO.
+    // TODO: also add a `cross' distribution to accomodate for the qg-channels
     double distres = 2.*higgs.distrpartonic(pt,nn,zz1,zz2);
     double xsection = SIGMA0*(aass/2.)*distres;
     return xsection;

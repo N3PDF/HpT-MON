@@ -718,7 +718,6 @@ double HiggsDpT::distr(
     double x20 = tm/SROOT*exp(-yh);
     double dcut = x10*std::pow(pt/tm,2)/(1.-x10*(1.-std::pow(pt/tm,2)));
 
-    //// START 1st double integral ////
     double z1 = x20+(1.-dcut-x20)*zz1;
     double jac = 1.-dcut-x20;
     double lb = std::pow(pt,2)/std::pow(tm,2)*z1/(1.-z1);
@@ -791,7 +790,6 @@ double HiggsDpT::distr(
         *log(std::pow(pt,2)/(std::pow(pt,2)+QQ2))/std::pow(pt,2)) \
         *(Lumi->Lumqq(x1,x2)+Lumi->LumqQb(x1,x2)+Lumi->LumqQ(x1,x2))/sh;
 
-    //// END 1st double integral ////
 
     // Non-Singular terms //
     REG(pt,uh,th,sh);
@@ -803,7 +801,6 @@ double HiggsDpT::distr(
                 +Lumi->LumqQb(x1,x2)) \
                 +REGqq*Lumi->Lumqq(x1,x2))/sh;
 
-    //// START 2nd double integral ////
     x1 = x10*(1.+lb);
     x2 = x20/z1;
 
@@ -853,7 +850,6 @@ double HiggsDpT::distr(
     double z2min = x10*(1+lb);
     double m10 = -0.5*a10*std::pow(log(1-z2min),2)-log(1-z2min)*b10;
     m10 *= pre10*(1.-dcut-x20);
-    //// END 2nd double integral ////
 
 
     // COMBINED INTEGRALS //
