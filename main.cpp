@@ -107,6 +107,7 @@ int main(int argc, char* argv[]) {
 
     // Define parameters
     PhysParams physparam;
+    physparam.nc = 3;
     physparam.nf = _nf;
     physparam.mh = _mh;
     physparam.mur = _mur;
