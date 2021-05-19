@@ -45,6 +45,9 @@ the code, use one of the run cards in the `runcards` folder as follows:
 Every time changes are made, the code can be re-compiled by running `meson compile`
 inside the `builddir` directory.
 
+
+#### System-wide installation
+
 Finally, in case one wants to install the header files and library system-wide, this
 can be done by running the following:
 ```bash

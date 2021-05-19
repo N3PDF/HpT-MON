@@ -45,7 +45,8 @@ class CrossHiggs {
     double ExtractDistrPartonic(double pt, double nn, double zz1, double zz2);
 
  private:
-    double NF, MH2, aass, SIGMA0, ORD, CHANNEL;
+    int NF, ORD, CHANNEL;
+    double MH2, aass, SIGMA0;
 
     // Instantiate HiggsDpT class
     HiggsDpTpartonic higgs;
