@@ -114,3 +114,37 @@ double Luminosity::LumqQb(double x1, double x2) {
     }
     return lqQb;
 }
+
+
+//// compute TRUE luminosity ////
+// gg channel
+double f_gg(double x1, void *p)
+{
+	Luminosity::par_struct* p_struct = (Luminosity::par_struct *) p;
+	double x2 = p_struct -> t /x1;
+	double Muf = p_struct -> Muf;
+	Luminosity::PDF_ptr PDF = p_struct -> PDF;
+	return (PDF-> xfxQ(0,x1,Muf)/x1*PDF->xfxQ(0,x2,Muf)/x2)/x1;
+}
+
+
+double Luminosity::LumNgg(double x) {
+	par_struct param;
+	param.Muf = _muf;
+	param.PDF = _pdf;
+	param.t = x;
+	param.Nf = _nf;
+
+	double reslt = 0.;
+	double error = 0.;
+	double precision = 1e-4;
+
+	gsl_function Integrand;
+	gsl_integration_workspace * w = gsl_integration_workspace_alloc(1000);
+	Integrand.function = f_gg;
+	Integrand.params = param;
+
+	gsl_integration_qags(&Integrand,x,1.0,0,precision,1000,w,&reslt,&error);
+	gsl_integration_workspace_free(w);
+	return reslt;
+}

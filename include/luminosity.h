@@ -54,6 +54,17 @@ class Luminosity {
     double Lumqqb(double x1, double x2);
     double LumqQb(double x1, double x2);
 
+    // True luminosity
+    typedef LHAPDF::PDF* PDF_ptr;
+
+    struct par_struct {
+    	double Muf;
+    	PDF_ptr PDF;
+    	double t;
+    	unsigned int Nf;
+    };
+    double LumNgg(double x);
+
     // compute pdf
     double xfxQ(int pidflv, double x);
     double fxQ(double x, double pidflv);
