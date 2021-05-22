@@ -87,14 +87,15 @@ int main(int argc, char* argv[]) {
     // Factors for Born cross-section
     double factor;
     double gf = 1.16637e-5;                         // Fermi Constant, same as HqT but according to 
-                                                    // PDG this should be 1.16638e-5
+                                                    // PDG this should be 1.16638e-5 and G&S sets it
+                                                    // to 1.16639e-5
     double gevpb = 3.8937966e8;                     // GeV to pb
 
     if (inorm == 1) {
         std::cout << "ERROR in inorm!" << std::endl;
         exit(EXIT_FAILURE);                         // TODO: complete implementation!
     } else if (inorm == 0) {
-        factor = gf/288./M_PI/sqrt(2.);             // large-top mass limit
+        factor = gf*sqrt(2.)/(576.*M_PI);             // large-top mass limit
     } else {
         std::cout << "ERROR in inorm!" << std::endl;
         exit(EXIT_FAILURE);
