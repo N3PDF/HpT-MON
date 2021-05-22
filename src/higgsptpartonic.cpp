@@ -558,7 +558,6 @@ double HiggsDpTpartonic::deltapartonic(double pt, double nn, double zz) {
         case(3): {result += qqb0(sh,th,uh);}    // qqb-channel
         break;
     }
-    result = 0;
     }
     if (ORD >= 1) {
     switch (CHANNEL) {
@@ -693,7 +692,7 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1, double 
     REG(pt,uh,th,sh,MH2);
 
     double shnew = za*sh;
-    double uhnew = (uh-MH2)*za+MH2;
+    double uhnew = za*sh*pt*pt/th;
 
     switch (CHANNEL) {
     // a1:: (log(1-za)/(1-za))+ terms
@@ -705,7 +704,7 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1, double 
         b1 += (1./th*pgg(za)*log(-MUF2*za/th)*gg0(shnew,th,uhnew,MH2) \
                 +za/th*big1*log((QQ2+pt*pt)*za/(-th))+za/th*big2);
         c1 += (1/(-th)*(-2*NF*Pqg(za)*log(MUF2/QQ2)+2*NF*za*(1-za)) \
-                *qg0(sh,th,uh)+0.5*big3);
+                *qg0(shnew,th,uhnew)+0.5*big3);
         nonsingular += 0.5*REGgg;
     }
     break;
@@ -767,7 +766,7 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1, double 
     double b10factor = 1./qq/QQ2max*(-th/za);
 
     shnew = za*sh;
-    uhnew = (uh-MH2)*za+MH2;
+    uhnew = za*sh*pt*pt/th;
 
     coeff(pt,uh,th,sh,MH2);
 
