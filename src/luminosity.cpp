@@ -142,7 +142,7 @@ double Luminosity::LumNgg(double x) {
 	gsl_function Integrand;
 	gsl_integration_workspace * w = gsl_integration_workspace_alloc(1000);
 	Integrand.function = f_gg;
-	Integrand.params = param;
+	Integrand.params = &param;
 
 	gsl_integration_qags(&Integrand,x,1.0,0,precision,1000,w,&reslt,&error);
 	gsl_integration_workspace_free(w);
