@@ -558,6 +558,7 @@ double HiggsDpTpartonic::deltapartonic(double pt, double nn, double zz) {
         case(3): {result += qqb0(sh,th,uh);}    // qqb-channel
         break;
     }
+    result = 0;
     }
     if (ORD >= 1) {
     switch (CHANNEL) {
@@ -810,6 +811,7 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1, double 
     double bdeltafactor = log(-QQ2max/th)/QQ2max*(-th/za);
 
     double bfinal = b1*jac1*b1factor-b10*jac10*b10factor+b10*jac10*bdeltafactor;
+    double afinal = a1*jac1*a1factor-a10*jac10*a10factor+a10*jac10*adeltafactor;
     double cfinal = c1*jac1;
     double nonsingularfinal = nonsingular*jac1;
 
