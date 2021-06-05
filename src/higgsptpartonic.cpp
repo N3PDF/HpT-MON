@@ -32,7 +32,7 @@ HiggsDpTpartonic::HiggsDpTpartonic(
     MH2  = std::pow(param.mh, 2);
     MUR2 = std::pow(param.mur, 2);
     MUF2 = std::pow(param.muf, 2);
-    aass = param.alphas/M_PI;
+    aass = param.alphas;
     SIGMA0 = param.sigma0;
 
     ORD = order;
@@ -532,20 +532,24 @@ double HiggsDpTpartonic::deltapartonic(double pt, double nn, double zz) {
     double xx = zz;
     double result = 0;
 
+    // This function calculates the terms of the cross section proportional to delta(Q²)
+    double QQ2 = 0;
+
     double xi = (pt*pt/MH2);
     double tauh = xx*std::pow(sqrt(1+xi)-sqrt(xi),2);
-    double QQ2 = 0;
-    double sh = 1;
-    double uh = 0.5*(QQ2/sh+tauh-1.-sqrt(std::pow(1+tauh-QQ2/sh,2)-4.*tauh*(1.+xi)))*sh;
-    double th = 0.5*(QQ2/sh+tauh-1.+sqrt(std::pow(1+tauh-QQ2/sh,2)-4.*tauh*(1.+xi)))*sh;
-    double jac = 2./sqrt(std::pow(1+tauh-QQ2/sh,2)-4.*tauh*(1.+xi))/sh;
-    double mur2 = MUR2/MH2*tauh*sh;
-    double q2 = tauh*sh;
+    double sh = MH2/tauh;
+    double mt2 = pt*pt+MH2;
+    double uh = 0.5*(QQ2+MH2-sh-sqrt(std::pow(sh+MH2-QQ2,2)-4.*sh*mt2));
+    double th = 0.5*(QQ2+MH2-sh+sqrt(std::pow(sh+MH2-QQ2,2)-4.*sh*mt2));
+
+    // The jacobian is defined  such that the integration variable is Q². This, toghether with
+    // setting QQ2=0 is needed to properly handle the delta(Q²) term.
+    double jac = 1./sqrt(std::pow(sh+MH2-QQ2,2)-4.*sh*mt2); 
 
     // compute terms proportional to delta(Q^2)
     if (ORD >= 0) {
     switch (CHANNEL) {
-        case(0): {result += gg0(sh,th,uh,q2);}  // gg-channel
+        case(0): {result += gg0(sh,th,uh,MH2);}  // gg-channel
         break;
         case(1): {result += gq0(sh,th,uh);}     // gq-channel
         break;
@@ -557,66 +561,68 @@ double HiggsDpTpartonic::deltapartonic(double pt, double nn, double zz) {
     }
     if (ORD >= 1) {
     switch (CHANNEL) {
+        // We multiply by aass/(2*M_PI) because it is one order higher than the LO part of the xsec
+        // that is also calculated in this function. 
         case(0):    // gg-channel
         {
             double uu = 0.5*std::pow(log(uh/th),2)+std::pow(M_PI,2)/3. \
-                -log(sh/q2)*log(-th/q2)-log(sh/q2)*log(-uh/q2) \
-                -log(-uh/q2)*log(-th/q2)\
-                +std::pow(log(q2/sh),2)+std::pow(log(q2/(q2-th)),2) \
-                +std::pow(log(q2/(q2-uh)),2)+2.*Li2(1.-q2/sh) \
-                +2.*Li2(q2/(q2-th))+2.*Li2(q2/(q2-uh));
-            double de = 1.5*beta0*(log(-mur2/th)+log(-mur2/uh))+67./6.-5./9.*NF;
-            result += aass/2.*((11.+de+3.*uu)*gg0(sh,th,uh,q2)
-                    +(3.-NF)*(std::pow(q2,2)/sh+std::pow(q2,2)/th \
-                    +std::pow(q2,2)/uh+q2));
+                -log(sh/MH2)*log(-th/MH2)-log(sh/MH2)*log(-uh/MH2) \
+                -log(-uh/MH2)*log(-th/MH2)\
+                +std::pow(log(MH2/sh),2)+std::pow(log(MH2/(MH2-th)),2) \
+                +std::pow(log(MH2/(MH2-uh)),2)+2.*Li2(1.-MH2/sh) \
+                +2.*Li2(MH2/(MH2-th))+2.*Li2(MH2/(MH2-uh));
+            double de = 1.5*beta0*(log(-MUR2/th)+log(-MUR2/uh))+67./6.-5./9.*NF;
+            result += aass/(2.*M_PI)*((11.+de+3.*uu)*gg0(sh,th,uh,MH2)
+                    +(3.-NF)*(std::pow(MH2,2)/sh+std::pow(MH2,2)/th \
+                    +std::pow(MH2,2)/uh+MH2));
         }
         break;
         case(1):    // gq-channel
         {
             double V1 = 0.5*(std::pow(log(uh/th),2)+std::pow(log(-sh/uh),2) \
-                -std::pow(log(-sh/th),2))+log(sh/q2)*log(-th/q2) \
-                -log(sh/q2)*log(-uh/q2)-log(-th/q2)*log(-uh/q2)+2. \
-                *Li2(q2/(q2-uh))+std::pow(log(q2/(q2-uh)),2) \
+                -std::pow(log(-sh/th),2))+log(sh/MH2)*log(-th/MH2) \
+                -log(sh/MH2)*log(-uh/MH2)-log(-th/MH2)*log(-uh/MH2)+2. \
+                *Li2(MH2/(MH2-uh))+std::pow(log(MH2/(MH2-uh)),2) \
                 +std::pow(M_PI,2);
-            double V2 = std::pow(log(q2/sh),2)+std::pow(log(q2/(q2-th)),2) \
-                -2.*log(sh/q2)*log(-th/q2)+2.*Li2(1.-q2/sh)+2. \
-                *Li2(q2/(q2-th))-3.5-2.*std::pow(M_PI,2)/3.;
-            double V3 = beta0*(2*log(-mur2/uh)+log(-mur2/th))+67./3.-10.*NF/9.;
+            double V2 = std::pow(log(MH2/sh),2)+std::pow(log(MH2/(MH2-th)),2) \
+                -2.*log(sh/MH2)*log(-th/MH2)+2.*Li2(1.-MH2/sh)+2. \
+                *Li2(MH2/(MH2-th))-3.5-2.*std::pow(M_PI,2)/3.;
+            double V3 = beta0*(2*log(-MUR2/uh)+log(-MUR2/th))+67./3.-10.*NF/9.;
 
-            result += ((11.+3*V1+4.*V2/3.+V3)*gq0(sh,th,uh) \
+            result += aass/(2.*M_PI)*((11.+3*V1+4.*V2/3.+V3)*gq0(sh,th,uh) \
                     +20./9.*(std::pow(sh,2)+std::pow(th,2) \
-                    +std::pow(uh,2)-uh*q2)/(-uh));
+                    +std::pow(uh,2)-uh*MH2)/(-uh));
         }
         break;
         case(2):    // qg-channel
         {
             double V1c = 0.5*(std::pow(log(th/uh),2)+std::pow(log(-sh/th),2) \
-                -std::pow(log(-sh/uh),2))+log(sh/q2)*log(-uh/q2) \
-                -log(sh/q2)*log(-th/q2)-log(-uh/q2)*log(-th/q2)+2. \
-                *Li2(q2/(q2-th))+std::pow(log(q2/(q2-th)),2) \
+                -std::pow(log(-sh/uh),2))+log(sh/MH2)*log(-uh/MH2) \
+                -log(sh/MH2)*log(-th/MH2)-log(-uh/MH2)*log(-th/MH2)+2. \
+                *Li2(MH2/(MH2-th))+std::pow(log(MH2/(MH2-th)),2) \
                 +std::pow(M_PI,2);
-            double V2c = std::pow(log(q2/sh),2)+std::pow(log(q2/(q2-uh)),2) \
-                -2*log(sh/q2)*log(-uh/q2)+2.*Li2(1.-q2/sh)+2. \
-                *Li2(q2/(q2-uh))-3.5-2.*std::pow(M_PI,2)/3.;
-            double V3c = beta0*(2*log(-mur2/th)+log(-mur2/uh))+67./3.-10.*NF/9.;
-            result += aass/2.*((11.+3.*V1c+4.*V2c/3.+V3c)*qg0(sh,th,uh) \
+            double V2c = std::pow(log(MH2/sh),2)+std::pow(log(MH2/(MH2-uh)),2) \
+                -2*log(sh/MH2)*log(-uh/MH2)+2.*Li2(1.-MH2/sh)+2. \
+                *Li2(MH2/(MH2-uh))-3.5-2.*std::pow(M_PI,2)/3.;
+            double V3c = beta0*(2*log(-MUR2/th)+log(-MUR2/uh))+67./3.-10.*NF/9.;
+            result += aass/(2.*M_PI)*((11.+3.*V1c+4.*V2c/3.+V3c)*qg0(sh,th,uh) \
                 +20./9.*(std::pow(sh,2)+std::pow(th,2)+std::pow(uh,2) \
-                -th*q2)/(-th));
+                -th*MH2)/(-th));
         }
         break;
         case(3):    // qqbar-channel
         {
-            double W1 = log(-uh/q2)*log(-th/q2)-log(sh/q2)*log(-uh/q2)-log(sh/q2) \
-                *log(-th/q2)+2.*Li2(1.-q2/sh)+std::pow(log(q2/sh),2)-0.5 \
+            double W1 = log(-uh/MH2)*log(-th/MH2)-log(sh/MH2)*log(-uh/MH2)-log(sh/MH2) \
+                *log(-th/MH2)+2.*Li2(1.-MH2/sh)+std::pow(log(MH2/sh),2)-0.5 \
                 *std::pow(log(uh/th),2)-5.*std::pow(M_PI,2)/3.;
             double W2 = 1.5*log(std::pow(sh,2)/th/uh)+std::pow(log(uh/th),2) \
-                -2.*log(-uh/q2)*log(-th/q2)+std::pow(log(q2/(q2-uh)),2) \
-                +std::pow(log(q2/(q2-th)),2)+2.*Li2(q2/(q2-uh))+2. \
-                *Li2(q2/(q2-th))-7.+2.*std::pow(M_PI,2);
-            double W3 = beta0/2*(4*log(mur2/sh)+log(-mur2/uh)+log(-mur2/th)) \
+                -2.*log(-uh/MH2)*log(-th/MH2)+std::pow(log(MH2/(MH2-uh)),2) \
+                +std::pow(log(MH2/(MH2-th)),2)+2.*Li2(MH2/(MH2-uh))+2. \
+                *Li2(MH2/(MH2-th))-7.+2.*std::pow(M_PI,2);
+            double W3 = beta0/2*(4*log(MUR2/sh)+log(-MUR2/uh)+log(-MUR2/th)) \
                 +(67./2.-5.*NF/3.);
-            result += aass/2.*((11.+3.*W1+4.*W2/3.+W3)*qqb0(sh,th,uh)+160./27. \
-                    *(std::pow(th,2)+std::pow(uh,2)+std::pow(sh,2)-sh*q2)/sh);
+            result += aass/(2.*M_PI)*((11.+3.*W1+4.*W2/3.+W3)*qqb0(sh,th,uh)+160./27. \
+                    *(std::pow(th,2)+std::pow(uh,2)+std::pow(sh,2)-sh*MH2)/sh);
         }
         break;
     }
@@ -626,10 +632,16 @@ double HiggsDpTpartonic::deltapartonic(double pt, double nn, double zz) {
     result *= jac;
 
     // Mellin transform
-    result *= tauh*std::pow(xx, nn-1);
+    result *= std::pow(xx, nn-1);
 
-    // dsigma/dxi to dsigma/dpt
-    result *= 2.*pt/MH2;
+    // 1/sh as in Eq. 2.4 of G&S
+    result *= 1./sh;
+
+    // dsigma/pt² to dsigma/dpt
+    result *= 2.*pt;
+
+    // why is this here?
+    result *= 2;
 
     return result;
 }
@@ -640,6 +652,7 @@ double HiggsDpTpartonic::deltapartonic(double pt, double nn, double zz) {
 //==============================================================================================//
 //                                    Non-Delta Terms                                           //
 //----------------------------------------------------------------------------------------------//
+
 double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1, double zz2) {
     ////////////////////////////////////////////////////////////////
     // This function computes the remaining terms that are not    //
@@ -648,81 +661,86 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1, double 
     ////////////////////////////////////////////////////////////////
     double nonsingular=0, a1=0, b1=0, c1=0, a10=0, b10=0;
 
-    double qq = zz1;
-    double xx = zz2;
+    double qq = zz1;    // qq = QQ2/QQ2max is an integration variable used to integrate out rapidity
+    double xx = zz2;    // xx = Q²/sh 
 
-    // the result is independent of sh
-    double sh = 1;
-
-    if (xx<1e-8 || xx>1.-1e-8) {
+    double tiny = 1e-8;
+    if (xx<tiny || xx>1.-tiny) {
         return 0.;
     }
 
     double xi = (pt*pt/MH2);
     double tauh = xx*std::pow(sqrt(1+xi)-sqrt(xi),2);
-    double QQ2max = (tauh+1.-2*sqrt(tauh*(1+xi)))*sh;
+    double sh = MH2/tauh;
+    double mt2 = pt*pt+MH2;
+    double QQ2max = (MH2+sh-2*sqrt(sh*mt2));
     double QQ2 = qq*QQ2max;
-    double uh = 0.5*(QQ2/sh+tauh-1.-sqrt(std::pow(1+tauh-QQ2/sh,2)-4.*tauh*(1.+xi)))*sh;
-    double th = 0.5*(QQ2/sh+tauh-1.+sqrt(std::pow(1+tauh-QQ2/sh,2)-4.*tauh*(1.+xi)))*sh;
-    double jac1 = 2.*QQ2max/sqrt(std::pow(1+tauh-QQ2/sh,2)-4.*tauh*(1.+xi))/sh;
-    double muf2 = MUF2/MH2*tauh*sh;
-    double z2 = -th/(QQ2-th);
-    double ptt = pt*sqrt(tauh*sh/MH2);
-    double q2 = tauh*sh;
+    // uh and th are defined as per App. B of Ravindran et al. (2002)
+    double uh = 0.5*(QQ2+MH2-sh-sqrt(std::pow(sh+MH2-QQ2,2)-4.*sh*mt2));
+    double th = 0.5*(QQ2+MH2-sh+sqrt(std::pow(sh+MH2-QQ2,2)-4.*sh*mt2));
+    double jac1 = QQ2max/sqrt(std::pow(sh+MH2-QQ2,2)-4.*sh*mt2); // Jacobian
+    double za = -th/(QQ2-th);
 
-    double a1factor = jac1*(log(qq)/qq+log(QQ2max*z2/-th)/qq)/QQ2max*(-th/z2);
-    double b1factor = jac1/qq/QQ2max*(-th/z2);
+    // `a1factor' and `b1factor' are the functions inside the plus distributions
+    double a1factor = log(1.-za)/(1.-za);
+    double b1factor = 1./(1.-za);
+    // Alternatively one can write `a1factor' and `b1factor' in terms of qq:
+    // double a1factor = (log(qq)/qq+log(QQ2max*za/-th)/qq)/QQ2max*(-th/za);
+    // double b1factor = 1./qq/QQ2max*(-th/za);
 
-    coeff(ptt,uh,th,sh,q2);
-    REG(ptt,uh,th,sh,q2);
+    coeff(pt,uh,th,sh,MH2);
+    REG(pt,uh,th,sh,MH2);
+
+    double shnew = za*sh;
+    double uhnew = za*sh*pt*pt/th;
 
     switch (CHANNEL) {
-    // a1:: (log(1-z1)/(1-z1))+ terms
-    // b1:: 1/(1-z1))+ terms
+    // a1:: (log(1-za)/(1-za))+ terms
+    // b1:: 1/(1-za))+ terms
     // c1:: regular  (non delta or plus distributions) terms
     case(0):    // gg-channel
     {
-        a1 += (1./(-th)*pgg(z2)*gg0(sh,th,uh,q2)+(-z2/th)*big1);
-        b1 += (1./th*pgg(z2)*log(-muf2*z2/th)*gg0(sh,th,uh,q2) \
-                +z2/th*big1*log((QQ2+ptt*ptt)*z2/(-th))+z2/th*big2);
-        c1 += (1/(-th)*(-2*NF*pqg(z2)*log(muf2/QQ2)+2*NF*z2*(1-z2)) \
-                *qg0(sh,th,uh)+0.5*big3);
+        a1 += (1./(-th)*pgg(za)*gg0(shnew,th,uhnew,MH2)+(-za/th)*big1);
+        b1 += (1./th*pgg(za)*log(-MUF2*za/th)*gg0(shnew,th,uhnew,MH2) \
+                +za/th*big1*log((QQ2+pt*pt)*za/(-th))+za/th*big2);
+        c1 += (1/(-th)*(-2*NF*Pqg(za)*log(MUF2/QQ2)+2*NF*za*(1-za)) \
+                *qg0(shnew,th,uhnew)+0.5*big3);
         nonsingular += 0.5*REGgg;
     }
     break;
     case(1):    // gq-channel
     {
-        a1 += (1./(-th)*pgg(z2)*gq0(sh,th,uh)+(-z2/th)*big4);
-        b1 += (1./th*pgg(z2)*log(-muf2*z2/th)*gq0(sh,th,uh) \
-                +z2/th*big4*log((QQ2+pt*pt)*z2/(-th)));
-        c1 += (1/(-th)*(-pqg(z2)*log(muf2/QQ2)+z2*(1-z2)) \
+        a1 += (1./(-th)*pgg(za)*gq0(sh,th,uh)+(-za/th)*big4);
+        b1 += (1./th*pgg(za)*log(-MUF2*za/th)*gq0(sh,th,uh) \
+                +za/th*big4*log((QQ2+pt*pt)*za/(-th)));
+        c1 += (1/(-th)*(-Pqg(za)*log(MUF2/QQ2)+za*(1-za)) \
                 *qqb0(sh,th,uh)+0.5*big5);
         nonsingular += 0.5*REGgq;
     }
     break;
     case(2):    // qg-channel
     {
-        a1 += -1./th*pqq(z2)*qg0(sh,th,uh);
-        b1 += (1./th*pqq(z2)*log(-muf2*z2/th)*qg0(sh,th,uh) \
-            +z2/th*8./3.*(std::pow(uh,2)+std::pow(sh,2))/(-th));
-        c1 += (-1/th*(4./3.*(1-z2)*qg0(sh,th,uh)\
-                +(-pgq(z2)*log(muf2/QQ2)+4/3*z2)*gg0(sh,th,uh,q2)) \
+        a1 += -1./th*pqq(za)*qg0(sh,th,uh);
+        b1 += (1./th*pqq(za)*log(-MUF2*za/th)*qg0(sh,th,uh) \
+            +za/th*8./3.*(std::pow(uh,2)+std::pow(sh,2))/(-th));
+        c1 += (-1/th*(4./3.*(1-za)*qg0(sh,th,uh)\
+                +(-Pgq(za)*log(MUF2/QQ2)+4/3*za)*gg0(shnew,th,uhnew,MH2)) \
                 +0.5*big5);
         nonsingular += 0.5*REGqg;
     }
     break;
     case(3):    // qqb-channel (same flavours)
     {
-        a1 += 1./(-th)*(pqq(z2)*qqb0(sh,th,uh)-z2*16./27. \
+        a1 += 1./(-th)*(pqq(za)*qqb0(sh,th,uh)-za*16./27. \
             *(std::pow(th,2)+std::pow(uh,2)+std::pow(QQ2-th,2) \
             +std::pow(QQ2-uh,2))/sh);
-        b1 += (1./th*pqq(z2)*log(-muf2*z2/th)*qqb0(sh,th,uh) \
-            -z2/th*log((QQ2+std::pow(pt,2))*z2/(-th))*16./27. \
+        b1 += (1./th*pqq(za)*log(-MUF2*za/th)*qqb0(sh,th,uh) \
+            -za/th*log((QQ2+std::pow(pt,2))*za/(-th))*16./27. \
             *(std::pow(th,2)+std::pow(uh,2)+std::pow(QQ2-th,2) \
-            +std::pow(QQ2-uh,2))/sh+z2/th*16./9. \
+            +std::pow(QQ2-uh,2))/sh+za/th*16./9. \
             *beta0*(std::pow(uh,2)+std::pow(th,2))/sh);
-        c1 += (-1/th*(4./3*(1-z2)*qqb0(sh,th,uh)+(-pgq(z2) \
-            *log(muf2/QQ2)+4./3*z2)*gq0(sh,th,uh))+16./9 \
+        c1 += (-1/th*(4./3*(1-za)*qqb0(sh,th,uh)+(-Pgq(za) \
+            *log(MUF2/QQ2)+4./3*za)*gq0(sh,th,uh))+16./9 \
             *(std::pow(sh-QQ2,2)+std::pow(uh+th-2*QQ2,2))/sh \
             *log(std::pow(pt,2)/(std::pow(pt,2)+QQ2))/std::pow(pt,2));
         nonsingular += 0.5*REGqqb;
@@ -730,7 +748,7 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1, double 
     break;
     case(4):    // qQ, qQb and qq - channel (same flavours)
     {
-        c1 += 3.*(-1./th*(-pgq(z2)*log(muf2/QQ2)+4./3*z2)*gq0(sh,th,uh) \
+        c1 += 3.*(-1./th*(-Pgq(za)*log(MUF2/QQ2)+4./3*za)*gq0(sh,th,uh) \
             +16./9*(std::pow(sh-QQ2,2)+std::pow(uh+th-2*QQ2,2))/sh \
             *log(std::pow(pt,2)/(std::pow(pt,2)+QQ2))/std::pow(pt,2));
         nonsingular += 3.*0.5*REGqqpb;
@@ -738,72 +756,80 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1, double 
     break;
     }
 
-    QQ2 = 0.;
-    uh = 0.5*(QQ2/sh+tauh-1.-sqrt(std::pow(1+tauh-QQ2/sh,2)-4.*tauh*(1.+xi)))*sh;
-    th = 0.5*(QQ2/sh+tauh-1.+sqrt(std::pow(1+tauh-QQ2/sh,2)-4.*tauh*(1.+xi)))*sh;
-    double jac10 = 2.*QQ2max/sqrt(std::pow(1+tauh-QQ2/sh,2)-4.*tauh*(1.+xi))/sh;
-    z2 = -th/(QQ2-th);
+    // Here we deal with the za=1 part of the plus distribution. za=1 corresponds to setting QQ2=0.
+    QQ2 = 0;
+    uh = 0.5*(QQ2+MH2-sh-sqrt(std::pow(sh+MH2-QQ2,2)-4.*sh*mt2));
+    th = 0.5*(QQ2+MH2-sh+sqrt(std::pow(sh+MH2-QQ2,2)-4.*sh*mt2));
+    za = -th/(QQ2-th);
+    double jac10 = QQ2max/sqrt(std::pow(sh+MH2-QQ2,2)-4.*sh*mt2);;
+    double a10factor = (log(qq)/qq+log(QQ2max*za/-th)/qq)/QQ2max*(-th/za);
+    double b10factor = 1./qq/QQ2max*(-th/za);
 
-    double a10factor = jac10*(log(qq)/qq+log(QQ2max*z2/-th)/qq)/QQ2max*(-th/z2);
-    double b10factor = jac10/qq/QQ2max*(-th/z2);
+    shnew = za*sh;
+    uhnew = za*sh*pt*pt/th;
 
-    coeff(ptt,uh,th,sh,q2);
+    coeff(pt,uh,th,sh,MH2);
 
     switch (CHANNEL) {
     case(0):    // gg-channel
     {
-        a10 += (1./(-th)*pgg(z2)*gg0(sh,th,uh,q2)+(-z2/th)*big1);
-        b10 += (1./th*pgg(z2)*log(-muf2*z2/th)*gg0(sh,th,uh,q2) \
-                +z2/th*big1*log((QQ2+ptt*ptt)*z2/(-th))+z2/th*big2);
+        a10 += (1./(-th)*pgg(za)*gg0(shnew,th,uhnew,MH2)+(-za/th)*big1);
+        b10 += (1./th*pgg(za)*log(-MUF2*za/th)*gg0(shnew,th,uhnew,MH2) \
+                +za/th*big1*log((QQ2+pt*pt)*za/(-th))+za/th*big2);
     }
     break;
     case(1):    // gq-channel
     {
-        a10 += (1./(-th)*pgg(z2)*gq0(sh,th,uh)+(-z2/th)*big4);
-        b10 += (1./th*pgg(z2)*log(-muf2*z2/th)*gq0(sh,th,uh) \
-                +z2/th*big4*log((QQ2+pt*pt)*z2/(-th)));
+        a10 += (1./(-th)*pgg(za)*gq0(sh,th,uh)+(-za/th)*big4);
+        b10 += (1./th*pgg(za)*log(-MUF2*za/th)*gq0(sh,th,uh) \
+                +za/th*big4*log((QQ2+pt*pt)*za/(-th)));
     }
     break;
     case(2):    // qg-channel
     {
-        a10 += -1./th*pqq(z2)*qg0(sh,th,uh);
-        b10 += (1./th*pqq(z2)*log(-muf2*z2/th)*qg0(sh,th,uh) \
-            +z2/th*8./3.*(std::pow(uh,2)+std::pow(sh,2))/(-th));
+        a10 += -1./th*pqq(za)*qg0(sh,th,uh);
+        b10 += (1./th*pqq(za)*log(-MUF2*za/th)*qg0(sh,th,uh) \
+            +za/th*8./3.*(std::pow(uh,2)+std::pow(sh,2))/(-th));
     }
     break;
     case(3):    // qqb-channel
     {
-        a10 += 1./(-th)*(pqq(z2)*qqb0(sh,th,uh)-z2*16./27.\
+        a10 += 1./(-th)*(pqq(za)*qqb0(sh,th,uh)-za*16./27.\
             *(std::pow(th,2)+std::pow(uh,2)+std::pow(QQ2-th,2) \
             +std::pow(QQ2-uh,2))/sh);
-        b10 += (1./th*pqq(z2)*log(-muf2*z2/th)*qqb0(sh,th,uh) \
-            -z2/th*log((QQ2+std::pow(pt,2))*z2/(-th))*16./27. \
+        b10 += (1./th*pqq(za)*log(-MUF2*za/th)*qqb0(sh,th,uh) \
+            -za/th*log((QQ2+std::pow(pt,2))*za/(-th))*16./27. \
             *(std::pow(th,2)+std::pow(uh,2)+std::pow(QQ2-th,2) \
-            +std::pow(QQ2-uh,2))/sh+z2/th*16./9. \
+            +std::pow(QQ2-uh,2))/sh+za/th*16./9. \
             *beta0*(std::pow(uh,2)+std::pow(th,2))/sh);
     }
     break;
     }
 
-    double adeltafactor = jac10*0.5*std::pow(log(-QQ2max/th),2)/QQ2max*(-th/z2);
-    double afinal = a1*a1factor-a10*a10factor+a10*adeltafactor;
+    double adeltafactor = 0.5*std::pow(log(-QQ2max/th),2)/QQ2max*(-th/za);
+    double bdeltafactor = log(-QQ2max/th)/QQ2max*(-th/za);
 
-    double bdeltafactor = jac10*log(-QQ2max/th)/QQ2max*(-th/z2);
-    double bfinal = b1*b1factor-b10*b10factor+b10*bdeltafactor;
-
+    double bfinal = b1*jac1*b1factor-b10*jac10*b10factor+b10*jac10*bdeltafactor;
+    double afinal = a1*jac1*a1factor-a10*jac10*a10factor+a10*jac10*adeltafactor;
     double cfinal = c1*jac1;
-
     double nonsingularfinal = nonsingular*jac1;
 
     double result = afinal+bfinal+cfinal+nonsingularfinal;
 
     // Mellin transform
-    result *= tauh*std::pow(xx, nn-1);
+    result *= std::pow(xx, nn-1);
 
-    // dsigma/dxi to dsigma/dpt
-    result *= 2.*pt/MH2;
+    // dsigma/pt² to dsigma/dpt
+    result *= 2.*pt;
+
+    // 1/sh as in Eq. 2.4 of G&S
+    result *= 1./sh;
+
+    // why do we need this? 
+    result *= 2.;
 
     return result;
 }
+
 
 //==============================================================================================//

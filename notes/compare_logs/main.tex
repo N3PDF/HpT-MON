@@ -1,0 +1,168 @@
+% ------------------------------------------------------------------------------
+% Mathematics Project Report Template
+% by Jon Shiach 2019
+% Manchester Metropolitan University
+% ------------------------------------------------------------------------------
+\documentclass[10pt]{report} 
+
+\usepackage{projectreport} 	% Formatting of the document
+
+\setlength{\parskip}{1em}
+\renewcommand{\baselinestretch}{1}
+
+\newcommand{\dd}{\mathrm{d}}
+
+
+% ------------------------------------------------------------------------------
+% Document
+% ------------------------------------------------------------------------------
+\begin{document}
+	
+\setcounter{page}{0}
+\pagenumbering{arabic}
+
+In the following short notes, we compare the coefficient of $\left( \ln \xi_p \ln^2 N \right)$ at NLO that appear both in the 
+threshold and small-$p_T$ resummation. Throughout this notes, $\alpha_s$ always refers to $\alpha_s \left( \mu_R^2 \right)$.
+
+\section{Threshold resummation}
+
+The NLO term in the expansion of the threshold resummation has the following expression:
+\begin{align}
+	\frac{\dd \sigma^{\text{Thr},(2)}_{gg}}{\dd \xi_p} (N, \xi_p) = \left( \frac{\alpha_s}{\pi} \right)
+	\frac{\dd \sigma^{\text{LO}}_{gg}}{\dd \xi_p} (N, \xi_p) \left( \frac{3}{2} A_1 \ln^2N - \frac{A_1}{2} \ln \xi_p \ln N - B_1 \ln N
+	\right),
+	\label{eq:thres1}
+\end{align}
+where for simplicity, we set $\mu_R = \mu_F = Q$, getting rid of all $l_R = \ln \left( Q^2/\mu_R^2 \right)$ and $l_F = \ln \left( Q^2/\mu_F^2 \right)$
+terms. The logarithmic dependence in the LO term can be made explicit by subsequently taking the small-$p_T$ and the large-$N$ limit:
+\begin{align}
+	\frac{\dd \sigma^{\text{LO}}_{gg}}{\dd \xi_p} (N, \xi_p) = \left( \frac{\alpha_s}{\pi} \right) \left( -A_1 \frac{\ln \xi_p}{\xi_p}
+	- 2 C_A \frac{\ln N}{\xi_p} \right).
+	\label{eq:thres2}
+\end{align}
+Notice that in order to get the $\ln N$ dependence, we used $\gamma^{(1)}_{gg} (N \to \infty) = - C_A \ln N$, where for convenience we
+have also neglected $\gamma_E$. 
+
+Putting back Eq.~\eqref{eq:thres2} into Eq.~\eqref{eq:thres1} and keeping only the $\left( \ln \xi_p \ln^2 N \right)$-term, 
+we arrive to the following:
+\begin{align}
+	\frac{\dd \sigma^{\text{Thr},(2)}_{gg}}{\dd \xi_p} (N, \xi_p) = \left( \frac{\alpha_s}{\pi} \right)^2 \Sigma^{\text{Thr},(2)}_{gg} (N, \xi_p)
+	\quad \text{ where } \quad \Sigma^{\text{Thr},(2)}_{gg} (N, \xi_p) = - \frac{C_A^2}{2} \frac{\ln \xi_p}{\xi_p} \ln^2N.
+	\label{eq:thres_alphas2}
+\end{align}
+
+
+
+
+\subsection{Mathematica}
+If we instead use the mathematica notebook in the HpT-MON repo that contains the full threshold expression (\href{https://github.com/N3PDF/HpT-MON/blob/de6e78e273e6b5f31b5ec39811656ef801c11176/tools/thresdhold-corrected-expansion.nb}{namely,  \color{blue} N3PDF/HpT-MON/tools/thresdhold-corrected-expansion.nb}) and do the expansion of the full resummed expression, then the term proportional to $\alpha_s^2 \log^2 N \log \xi_p$ is 
+\begin{equation}
+\frac{\dd \sigma^{\text{Thr},(2)}_{gg}}{\dd \xi_p} (N, \xi_p) = -\left( \frac{\alpha_s}{\pi} \right)^2 \frac{C_A^2}{2}\frac{\log \xi_p}{\xi_p}\log^2N.
+\end{equation}
+
+
+
+\section{Small-$p_T$ resummation}
+
+The following just simplifies the expressions in Bozzi's paper where all the references to the equations are based on the peer-reviewed
+version.
+
+The NLO term in the expansion of the small-$p_T$ resummation yields the following expression:
+\begin{align}
+	\frac{\dd \sigma^{\text{SpT},(2)}_{gg}}{\dd \xi_p} (N, \xi_p) = \left( \frac{\alpha_s}{\pi} \right)^2  \Sigma^{\text{H},(2)}_{gg} (N, \xi_p),
+\end{align}
+where $\Sigma^{\text{H},(2)}_{gg} (N, \xi_p)$ is given by Eq.~(62) with the difference that, here, we express the results in $p_T$-space instead of
+the conjugate variable in Fourier space. Therefore, $\Sigma^{\text{H},(2)}_{gg} (N, \xi_p),$ is defined to be:
+\begin{align}
+	\Sigma^{\text{H},(2)}_{gg} (N, \xi_p) = \Sigma^{(2,4)}_{gg} (N) ~ \bar{\mathrm{I}}_4 (\sqrt{\xi_p})  + \Sigma^{(2,3)}_{gg} (N) ~ \bar{\mathrm{I}}_3 (\sqrt{\xi_p}) 
+	+ \Sigma^{(2,2)}_{gg} (N) ~ \bar{\mathrm{I}}_2 (\sqrt{\xi_p}) + \Sigma^{(2,1)}_{gg} (N) ~ \bar{\mathrm{I}}_1 (\sqrt{\xi_p})
+	\label{eq:expansion}
+\end{align}
+where the $\bar{\mathrm{I}}_n$'s (which are not expressed in terms of the Bessel functions) are given explicitly in Eq.~(B.25). The explicit
+expressions of $\Sigma^{(2,i)}$ are given in Eqs.~(66)-(68). The $N$ dependence from which $\ln N$ will arise is embodied in $\Sigma^{(2,i)}$ 
+through the anomalous dimension.
+
+In order to use the above equations, we take into account the following considerations:
+\begin{itemize}
+	\item set $\mu_R = \mu_F = Q = M$ which implies that $l_R = l_F = l_M = 0$.
+	\item collect only terms that are proportional to $\left( \gamma^{(1)}_{gg} (N) \right)^2$ since these are the only contributions that will
+	give rise to $\ln^2 N$. Based on this, we see that only $\Sigma^{(2,2)}_{gg} (N) ~ \bar{\mathrm{I}}_2 (\sqrt{\xi_p})$ in Eq.~\eqref{eq:expansion} is retained.
+\end{itemize}
+Based on the above consideration, it is obvious to see that $\Sigma^{(2,2)}_{gg} (N) = 2 \left( \gamma^{(1)}_{gg} (N) \right)^2$ which in the large-$N$
+limit just gives $\Sigma^{(2,2)}_{gg} (N \to \infty) = 2 C_A^2 \ln^2N$, and using Eq.~(B.25) we find that $\bar{\mathrm{I}}_2 (\sqrt{\xi_p}) =
+2 \ln \xi_p/ \xi_p$. Therefore, we have:
+\begin{align}
+	\frac{\dd \sigma^{\text{SpT},(2)}_{gg}}{\dd \xi_p} (N, \xi_p) = \left( \frac{\alpha_s}{\pi} \right)^2  \Sigma^{\text{SpT},(2)}_{gg} (N, \xi_p)
+	\quad \text{where} \quad \Sigma^{\text{SpT},(2)}_{gg} (N, \xi_p) = 4 C_A^2 \frac{\ln \xi_p}{\xi_p} \ln^2N.
+\label{eq:smallpt_alphas2_bozzi}
+\end{align}
+
+
+
+
+
+\section{comparisons to (De Florian, Grazzini - 2001)}
+
+\subsection{LO large-N}
+It is perhaps worth noting that Eq.~\eqref{eq:thres2} is in agreement with Eq~(17) of (De Florian, Grazzini - 2001). 
+
+Please also note that while the expansion in the paper is done in orders of $\frac{\alpha_s}{2\pi}$, constants are also defined differently from what we are used to (e.g. $A^{(1)}_g=2C_A$). So from Eq~(16) in De Florian, Grazzini we obtain that the leading order term is proportional to 
+\begin{equation}
+\Sigma_{gg}(N) = \frac{\alpha_s}{2\pi} \Sigma^{(1)}_{gg}(N) + \mathcal{O}(\alpha_s^2),
+\label{eq:sigmaexpansioninalpha}
+\end{equation}
+where
+\begin{equation}
+\Sigma_{c \bar{c}}^{(1)}(N)=A_{c}^{(1)} \log \frac{Q^{2}}{q_{T}^{2}}+B_{c}^{(1)}+2 \gamma_{c c}^{(1)}(N).
+\end{equation}
+Which in the small-pT limit we can write as
+\begin{equation}
+\Sigma_{c \bar{c}}^{(1)}(N)= -A_{c}^{(1)} \log \xi_p +B_{c}^{(1)}+2 \gamma_{c c}^{(1)}(N),
+\end{equation}
+and subsequently taking the large-N limit gives us for the gg-channel
+\begin{equation}
+\Sigma_{gg}^{(1)}(N)= -2 C_A \log \xi_p - 4 C_A \log N,
+\end{equation}
+so if we plug this into Eq.~\eqref{eq:sigmaexpansioninalpha}, we see that this is in agreement with result as found above in Eq.~\eqref{eq:thres2}. 
+
+ If I understand correctly the $\Sigma$ terms in the paper correspond to a cross section differential in $Q^2$, so that does have to be integrated out. Of course, we know that the leading order term is correct and it seems unlikely that mathematica screwed up the sign in doing the expansion while subsequently taking the small-pT and large-N limits.
+
+
+
+\subsection{$\alpha_s^2 \log^N \log \xi_p / \xi_p$ term }
+For now we are only interested in the term proportional to $\log^N \log \xi_p / \xi_p$ in $\Sigma^{(2)}_{gg}(N)$ of Eq.~18 in (De Florian, Grazzini - 2001). The relevant part of this term is
+\begin{equation}
+\Sigma^{(2)}_{gg}(N) = -\log \xi_p\left[ -4 \left(\gamma^{(1)}_{gg}(N)\right)^2-2\sum_{j\neq g}\gamma^{(1)}_{gj}\gamma^{(1)}_{jg} \right] = 4 \log \xi_p \left(\gamma^{(1)}_{gg}(N)\right)^2,
+\label{eq:sigma2ggnolimit}
+\end{equation}
+where the second term vanishes because the only $\log N$ terms in the one-loop anomalous dimensions are in $\gamma^{(1)}_{gg}$ and $\gamma^{(1)}_{qq}$.
+
+In the large-N limit Eq.~\eqref{eq:sigma2ggnolimit} becomes 
+
+\begin{equation}
+\Sigma^{(2)}_{gg}(N) = 4 C_A^2 \log \xi_p \left( 2 \log N\right)^2,
+\label{eq:sigma2largeN}
+\end{equation}
+which we can plug into Eq.~(16) of De Florian and Grazzini, which gives a term proportional to
+\begin{align}
+\Sigma_{gg}(N) &= \frac{\alpha_s}{2\pi} \Sigma^{(1)}_{gg}(N) + \left( \frac{\alpha_s}{2\pi} \right)^2 4 C_A^2 \log \xi_p \left( 2 \log N\right)^2+ \mathcal{O}(\alpha_s^3), \\
+&= \frac{\alpha_s}{2\pi} \Sigma^{(1)}_{gg}(N) + \left( \frac{\alpha_s}{\pi} \right)^2 4 C_A^2 \log \xi_p \log^2 N + \mathcal{O}(\alpha_s^3).
+\end{align}
+This is in agreement with Eq.~\eqref{eq:smallpt_alphas2_bozzi}. 
+
+
+
+\subsection{Conclusions}
+Given that the results from the De Florian, Grazzini paper are in agreement with both the LO of Eq.~\eqref{eq:thres2} and the NLO term of small-pT from Bozzi given in Eq.~\eqref{eq:smallpt_alphas2_bozzi}, the most likely explanation would be that the error is in the expansion (probably already at the expanded level) of the threshold resummed cross section.
+
+Of course we found very good agreement with HpT-MON only after fixing the $\log \xi_p$ dependent terms in the threshold exponent using the error that Stefano found. This means that an argument along the lines of ``a small-pT term might be wrong, but we wouldn't have noticed this when checking the threshold expression in large-N agains the FO result'', is probably not valid. Although, given that there are in the end three(?) pT dependent terms in the exponent of threshold, maybe one that is indeed insignificant in large-N is still bugged? This all seems a bit unlikely, but not so many options remain. 
+
+
+
+
+
+
+
+
+
+\end{document}

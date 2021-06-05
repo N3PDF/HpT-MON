@@ -1,0 +1,14 @@
+N=5, pt=0.5
+
+baseline:   8.509711e-01
+cfinal=0:   1.084516e+00
+big1=0:     9.526310e-01
+big2=0:     8.170215e-01
+bfinal=0:   2.754308e-01
+afinal=0:   4.895666e-01
+
+conclusion: impact of afinal and bfinal at small-pt are both larger than cfinal. Where removing cfinal results in an increase in the resulting cross section (meaning cfinal<0), we find the opposite effect upon removing afinal or bfinal. 
+
+nonsingularfinal contains nans. nonsingularfinal is not singular as pt->0 and therefore it's contribution is insignificant as pt goes to 0, hence we can set it to 0 and see what happens with the other terms. In doing so, we observe that as pt->0 the cross section increases and seems to approach positive infinity. Because we expect (based on mathematica notebooks by roy and Tanjona, as well as x-space results in the G&S paper) that instead the cross section should approach negative infinity as pt->0. 
+
+Furthermore, cfinal does not diverge as N->infinity, and hence setting cfinal=0 has no significant effect on the threshold limit. Since we found near-perferct agreement between the NLO FO from HpT-MON and the soft resummed expression in the threshold limit it seems not unlikely that somhow we have obtained the wrong prefactor for cfinal. Although, upon checkign this prefactor, we find that if we finetune the prefactor of cfinal at pt=0.1 the result of HpT-MON at pt=0.01 is much smaller (factor ~1.5) than the mathematica notebooks. And a similar story at pt=0.001. This cannot be the result of not having selected quite the correct value at pt=0.1, since the result at pt=0.001 is relatively stable upon changes in the prefactor of cfinal. 

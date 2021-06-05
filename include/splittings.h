@@ -29,5 +29,5 @@
 
 double pgg(double z);
 double pqq(double z);
-double pgq(double z);
-double pqg(double z);
+double Pgq(double z);
+double Pqg(double z);

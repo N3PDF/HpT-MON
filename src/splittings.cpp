@@ -28,10 +28,10 @@ double pqq(double z) {
     return 4./3.*(1+std::pow(z,2));
 }
 
-double pgq(double z) {
+double Pgq(double z) {
     return 4./3.*(1+std::pow(1.-z,2))/z;
 }
 
-double pqg(double z) {
+double Pqg(double z) {
     return 0.5*(std::pow(z,2)+std::pow(1-z,2));
 }

@@ -21,6 +21,7 @@
 #include <string>
 
 struct PhysParams{
+    int nc;
     int nf;
     double mh;
     double mur;

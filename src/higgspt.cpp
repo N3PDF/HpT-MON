@@ -718,7 +718,6 @@ double HiggsDpT::distr(
     double x20 = tm/SROOT*exp(-yh);
     double dcut = x10*std::pow(pt/tm,2)/(1.-x10*(1.-std::pow(pt/tm,2)));
 
-    //// START 1st double integral ////
     double z1 = x20+(1.-dcut-x20)*zz1;
     double jac = 1.-dcut-x20;
     double lb = std::pow(pt,2)/std::pow(tm,2)*z1/(1.-z1);
@@ -748,7 +747,7 @@ double HiggsDpT::distr(
     double b1 = (1./th*pgg(z2)*log(-MUF2*z2/th)*gg0(z2*x1,x2,tm,yh) \
                 +z2/th*big1*log((QQ2+pt*pt)*z2/(-th))+z2/th*big2) \
                 *Lumi->Lumgg(x1,x2)/sh;
-    double c1 = (1/(-th)*(-2*NF*pqg(z2)*log(MUF2/QQ2)+2*NF*z2*(1-z2)) \
+    double c1 = (1/(-th)*(-2*NF*Pqg(z2)*log(MUF2/QQ2)+2*NF*z2*(1-z2)) \
                 *qg0(z2*x1,x2,tm,yh)+0.5*big3)*Lumi->Lumgg(x1,x2)/sh;
 
     // gq-channel
@@ -756,7 +755,7 @@ double HiggsDpT::distr(
             *Lumi->Lumgq(x1,x2)/sh;
     b1 += (1./th*pgg(z2)*log(-MUF2*z2/th)*gq0(z2*x1,x2,tm,yh) \
             +z2/th*big4*log((QQ2+pt*pt)*z2/(-th)))*Lumi->Lumgq(x1,x2)/sh;
-    c1 += (1/(-th)*(-pqg(z2)*log(MUF2/QQ2)+z2*(1-z2))\
+    c1 += (1/(-th)*(-Pqg(z2)*log(MUF2/QQ2)+z2*(1-z2))\
             *qqb0(z2*x1,x2,tm,yh)+0.5*big5)*Lumi->Lumgq(x1,x2)/sh;
 
     // qg-channel
@@ -766,7 +765,7 @@ double HiggsDpT::distr(
         +z2/th*8./3.*(std::pow(uh,2)+std::pow(sh,2))/(-th)) \
         *Lumi->Lumqg(x1,x2)/sh;
     c1 += (-1/th*(4./3.*(1-z2)*qg0(z2*x1,x2,tm,yh)\
-        +(-pgq(z2)*log(MUF2/QQ2)+4/3*z2)*gg0(z2*x1,x2,tm,yh))\
+        +(-Pgq(z2)*log(MUF2/QQ2)+4/3*z2)*gg0(z2*x1,x2,tm,yh))\
         +0.5*big5)*Lumi->Lumqg(x1,x2)/sh;
 
     // qqb-channel
@@ -779,19 +778,18 @@ double HiggsDpT::distr(
         +std::pow(QQ2-uh,2))/sh+z2/th*16./9. \
         *beta0*(std::pow(uh,2)+std::pow(th,2))/sh) \
         *Lumi->Lumqqb(x1,x2)/sh;
-    c1 += (-1/th*(4./3*(1-z2)*qqb0(z2*x1,x2,tm,yh)+(-pgq(z2) \
+    c1 += (-1/th*(4./3*(1-z2)*qqb0(z2*x1,x2,tm,yh)+(-Pgq(z2) \
         *log(MUF2/QQ2)+4./3*z2)*gq0(z2*x1,x2,tm,yh))+16./9 \
         *(std::pow(sh-QQ2,2)+std::pow(uh+th-2*QQ2,2))/sh \
         *log(std::pow(pt,2)/(std::pow(pt,2)+QQ2))/std::pow(pt,2)) \
         *Lumi->Lumqqb(x1,x2)/sh;
 
     // qQ, qQb and qq - channel (same flavours)
-    c1 += (-1./th*(-pgq(z2)*log(MUF2/QQ2)+4./3*z2)*gq0(z2*x1,x2,tm,yh)\
+    c1 += (-1./th*(-Pgq(z2)*log(MUF2/QQ2)+4./3*z2)*gq0(z2*x1,x2,tm,yh)\
         +16./9*(std::pow(sh-QQ2,2)+std::pow(uh+th-2*QQ2,2))/sh \
         *log(std::pow(pt,2)/(std::pow(pt,2)+QQ2))/std::pow(pt,2)) \
         *(Lumi->Lumqq(x1,x2)+Lumi->LumqQb(x1,x2)+Lumi->LumqQ(x1,x2))/sh;
 
-    //// END 1st double integral ////
 
     // Non-Singular terms //
     REG(pt,uh,th,sh);
@@ -803,7 +801,6 @@ double HiggsDpT::distr(
                 +Lumi->LumqQb(x1,x2)) \
                 +REGqq*Lumi->Lumqq(x1,x2))/sh;
 
-    //// START 2nd double integral ////
     x1 = x10*(1.+lb);
     x2 = x20/z1;
 
@@ -853,7 +850,6 @@ double HiggsDpT::distr(
     double z2min = x10*(1+lb);
     double m10 = -0.5*a10*std::pow(log(1-z2min),2)-log(1-z2min)*b10;
     m10 *= pre10*(1.-dcut-x20);
-    //// END 2nd double integral ////
 
 
     // COMBINED INTEGRALS //
@@ -928,7 +924,7 @@ double HiggsDpT::distrcross(
     double b1 = (1./uh*pgg(z2)*log(-MUF2*z2/uh)*gg0(x1,x2*z2,tm,yh) \
                 +z2/uh*big1*log((QQ2+pt*pt)*z2/(-uh))+z2/uh*big2) \
                 *Lumi->Lumgg(x1,x2)/sh;
-    double c1 = (1./(-uh)*(-2.*NF*pqg(z2)*log(MUF2/QQ2)+2.*NF*z2*(1.-z2)) \
+    double c1 = (1./(-uh)*(-2.*NF*Pqg(z2)*log(MUF2/QQ2)+2.*NF*z2*(1.-z2)) \
                 *gq0(x1,x2*z2,tm,yh)+0.5*big3)*Lumi->Lumgg(x1,x2)/sh;
 
 
@@ -938,7 +934,7 @@ double HiggsDpT::distrcross(
         +z2/uh*8./3*(std::pow(th,2)+std::pow(sh,2))/(-uh)) \
         *Lumi->Lumgq(x1,x2)/sh;
     c1 += (-1./uh*(4./3*(1-z2)*gq0(x1,z2*x2,tm,yh) \
-        +(-pgq(z2)*log(MUF2/QQ2)+4./3*z2)*gg0(x1,z2*x2,tm,yh)) \
+        +(-Pgq(z2)*log(MUF2/QQ2)+4./3*z2)*gg0(x1,z2*x2,tm,yh)) \
         +0.5*big5)*Lumi->Lumgq(x1,x2)/sh;
 
     // qg-channel
@@ -948,7 +944,7 @@ double HiggsDpT::distrcross(
     b1 += (1./uh*pgg(z2)*log(-MUF2*z2/uh)*qg0(x1,z2*x2,tm,yh) \
         +z2/uh*big4*log((QQ2+std::pow(pt,2))*z2/(-uh))) \
         *Lumi->Lumqg(x1,x2)/sh;
-    c1 += (1./(-uh)*(-pqg(z2)*log(MUF2/QQ2)+z2*(1-z2)) \
+    c1 += (1./(-uh)*(-Pqg(z2)*log(MUF2/QQ2)+z2*(1-z2)) \
         *qqb0(x1,z2*x2,tm,yh)+0.5*big5)*Lumi->Lumqg(x1,x2)/sh;
 
     // qqb-channel
@@ -960,14 +956,14 @@ double HiggsDpT::distrcross(
         *(std::pow(th,2)+std::pow(uh,2)+std::pow(QQ2-th,2) \
         +std::pow(QQ2-uh,2))/sh+z2/uh*16./9*beta0*(std::pow(uh,2) \
         +std::pow(th,2))/sh)*Lumi->Lumqqb(x1,x2)/sh;
-    c1 += (-1./uh*(4./3*(1-z2)*qqb0(x1,z2*x2,tm,yh)+(-pgq(z2) \
+    c1 += (-1./uh*(4./3*(1-z2)*qqb0(x1,z2*x2,tm,yh)+(-Pgq(z2) \
         *log(MUF2/QQ2)+4./3*z2)*qg0(x1,z2*x2,tm,yh))+16./9 \
         *(std::pow(sh-QQ2,2)+std::pow(uh+th-2*QQ2,2))/sh \
         *log(std::pow(pt,2)/(std::pow(pt,2)+QQ2))/std::pow(pt,2)) \
         *Lumi->Lumqqb(x1,x2)/sh;
 
     // qQ-channel (same flavours)
-    c1 += (-1./uh*(-pgq(z2)*log(MUF2/QQ2)+4./3*z2)*qg0(x1,z2*x2,tm,yh) \
+    c1 += (-1./uh*(-Pgq(z2)*log(MUF2/QQ2)+4./3*z2)*qg0(x1,z2*x2,tm,yh) \
         +16./9*(std::pow(sh-QQ2,2)+std::pow(uh+th-2*QQ2,2))/sh \
         *log(std::pow(pt,2)/(std::pow(pt,2)+QQ2))/std::pow(pt,2)) \
         *(Lumi->Lumqq(x1,x2)+Lumi->LumqQb(x1,x2)+Lumi->LumqQ(x1,x2))/sh;
