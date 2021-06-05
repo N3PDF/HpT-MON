@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/359388296.svg)](https://zenodo.org/badge/latestdoi/359388296)
+
 #### Description
 
 HpT-MON (Higgs pt-distribution in Momentum and N-space) computes the
@@ -56,3 +58,15 @@ meson install
 ```
 This, by default, will install the header files in `/{prefix}/include/higgs-fo` and
 add `higgsfo.pc` to the PKG path.
+
+```python
+@misc{
+    Rabemananjara_Stegeman_2021,
+    title={N3PDF/HpT-MON: HpT-MON-v1.0.1},
+    url={https://zenodo.org/record/4903918},
+    DOI={10.5281/ZENODO.4903918},
+    author={Rabemananjara, Tanjona and Stegeman, Roy}, 
+    year={2021}, 
+    month={Jun} 
+} 
+```
