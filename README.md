@@ -36,13 +36,14 @@ cd builddir
 meson compile
 ```
 
-This will generate a binary called <kbd>higgs</kbd> in the `builddir` directory. To run
-the code, use one of the run cards in the `runcards` folder as follows:
+This will generate two executables called `higgsfo-pt` and `higgsfo-n` in the `builddir` 
+directory. To run the code, use one of the run cards in the `runcards` folder as follows:
 ```bash
-./higgs ../runcards/inputfile.yaml
+./higgsfo-n ../runcards/Higgs-FO-as-N.yaml    (for results as a function of N)
+./higgsfo-pt ../runcards/Higgs-FO-as-pt.yaml  (for results as a function of pt)
 ```
 
-Every time changes are made, the code can be re-compiled by running `meson compile`
+Every time changes are made, the code can be re-compiled by just running `meson compile`
 inside the `builddir` directory.
 
 
