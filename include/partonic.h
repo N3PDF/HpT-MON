@@ -18,9 +18,10 @@
 
 #pragma once
 
-#include <stdio.h>
 #include <math.h>
+#include <stdio.h>
 #include <stdlib.h>
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -28,26 +29,21 @@
 #include "./higgsptpartonic.h"
 #include "./integration.h"
 
-
 class CrossHiggs {
  public:
-    CrossHiggs(
-        int order,
-        int channel,
-        std::string pdfname,
-        void *params);
-    virtual ~CrossHiggs();
+  CrossHiggs(int order, int channel, std::string pdfname, void *params);
+  virtual ~CrossHiggs();
 
-    // Main function that performs the
-    // integration over rapidities
-    std::vector<double> partonichiggsdpt(double pt, double nn);
-    double ExtractDeltaPartonic(double pt, double nn, double zz);
-    double ExtractDistrPartonic(double pt, double nn, double zz1, double zz2);
+  // Main function that performs the
+  // integration over rapidities
+  std::vector<double> partonichiggsdpt(double pt, double nn);
+  double ExtractDeltaPartonic(double pt, double nn, double zz);
+  double ExtractDistrPartonic(double pt, double nn, double zz1, double zz2);
 
  private:
-    int NF, ORD, CHANNEL;
-    double MH2, aass, SIGMA0;
+  int NF, ORD, CHANNEL;
+  double MH2, aass, SIGMA0;
 
-    // Instantiate HiggsDpT class
-    HiggsDpTpartonic higgs;
+  // Instantiate HiggsDpT class
+  HiggsDpTpartonic higgs;
 };

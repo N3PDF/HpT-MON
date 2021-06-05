@@ -10,19 +10,15 @@
  *       Revision:  none
  *       Compiler:  gcc
  *
- *         Author:  Tanjona R. Rabemananjara, Roy Stegeman 
+ *         Author:  Tanjona R. Rabemananjara, Roy Stegeman
  *   Organization:  N3PDF
  *
  * =====================================================================================
  */
 
-
 #include "../include/utils.h"
 
-
 //==============================================================================================//
-//                                    Some math functions                                       //
+//                                    Some math functions //
 //----------------------------------------------------------------------------------------------//
-double Li2(double val) {
-    return gsl_sf_dilog(val);
-}
+double Li2(double val) { return gsl_sf_dilog(val); }

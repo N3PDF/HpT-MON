@@ -11,20 +11,19 @@
  *       Compiler:  gcc
  *
  *         Author:  Tanjona R. Rabemananjara, Roy Stegeman
- *   Organization:  N3PDF 
+ *   Organization:  N3PDF
  *
  * =====================================================================================
  */
 
 #pragma once
 
-#include <stdio.h>
-#include <stdlib.h>
 #include <gsl/gsl_sf_dilog.h>
 #include <gsl/gsl_sf_result.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include <cmath>
 #include <iostream>
-
 
 double Li2(double val);

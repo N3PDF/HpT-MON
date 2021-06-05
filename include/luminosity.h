@@ -18,50 +18,48 @@
 
 #pragma once
 
-#include <gsl/gsl_math.h>
 #include <LHAPDF/LHAPDF.h>
-#include <gsl/gsl_sf_psi.h>
-#include <gsl/gsl_sf_log.h>
-#include <gsl/gsl_sf_zeta.h>
-#include <gsl/gsl_sf_dilog.h>
-#include <gsl/gsl_sf_gamma.h>
 #include <gsl/gsl_chebyshev.h>
 #include <gsl/gsl_integration.h>
+#include <gsl/gsl_math.h>
+#include <gsl/gsl_sf_dilog.h>
+#include <gsl/gsl_sf_gamma.h>
+#include <gsl/gsl_sf_log.h>
+#include <gsl/gsl_sf_psi.h>
+#include <gsl/gsl_sf_zeta.h>
 
+#include <algorithm>
 #include <cmath>
-#include <string>
-#include <vector>
 #include <complex>
 #include <fstream>
 #include <iostream>
-#include <algorithm>
+#include <string>
+#include <vector>
 
 class Luminosity {
  public:
-    typedef LHAPDF::PDF* pdfptr;
+  typedef LHAPDF::PDF* pdfptr;
 
-    Luminosity(
-            std::string  pdfname,
-            double MUF, int NF);
-    virtual ~Luminosity();
+  Luminosity(std::string pdfname, double MUF, int NF);
+  virtual ~Luminosity();
 
-    // flavour based luminosity
-    double Lumgg(double x1, double x2);
-    double Lumgq(double x1, double x2);
-    double Lumqg(double x1, double x2);
-    double Lumqq(double x1, double x2);
-    double LumqQ(double x1, double x2);
-    double Lumqqb(double x1, double x2);
-    double LumqQb(double x1, double x2);
+  // flavour based luminosity
+  double Lumgg(double x1, double x2);
+  double Lumgq(double x1, double x2);
+  double Lumqg(double x1, double x2);
+  double Lumqq(double x1, double x2);
+  double LumqQ(double x1, double x2);
+  double Lumqqb(double x1, double x2);
+  double LumqQb(double x1, double x2);
 
-    // compute pdf
-    double xfxQ(int pidflv, double x);
-    double fxQ(double x, double pidflv);
+  // compute pdf
+  double xfxQ(int pidflv, double x);
+  double fxQ(double x, double pidflv);
 
-    // Extract alphas
-    double get_alphas(double mur);
+  // Extract alphas
+  double get_alphas(double mur);
 
  private:
-    LHAPDF::PDF* _pdf;
-    double _nf, _muf;
+  LHAPDF::PDF* _pdf;
+  double _nf, _muf;
 };
