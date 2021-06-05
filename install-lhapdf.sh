@@ -11,7 +11,7 @@ rm pdfinstall.log >& /dev/null
 rm -r bin include lib share LHAPDF-${VERSION} >& /dev/null
 
 echo "Downloading tar file..."
-wget http://www.hepforge.org/archive/lhapdf/LHAPDF-${VERSION}.tar.gz
+wget http://www.hepforge.org/archive/lhapdf/LHAPDF-${VERSION}.tar.gz --no-check-certificate
 tar -xzvf LHAPDF-${VERSION}.tar.gz
 rm LHAPDF-${VERSION}.tar.gz
 
