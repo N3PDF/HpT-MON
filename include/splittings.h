@@ -22,10 +22,9 @@
 #include <stdlib.h>
 
 #include <cmath>
-#include <vector>
-#include <iostream>
 #include <complex>
-
+#include <iostream>
+#include <vector>
 
 double pgg(double z);
 double pqq(double z);

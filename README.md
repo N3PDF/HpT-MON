@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/359388296.svg)](https://zenodo.org/badge/latestdoi/359388296)
+
 #### Description
 
 HpT-MON (Higgs pt-distribution in Momentum and N-space) computes the
@@ -36,13 +38,14 @@ cd builddir
 meson compile
 ```
 
-This will generate a binary called <kbd>higgs</kbd> in the `builddir` directory. To run
-the code, use one of the run cards in the `runcards` folder as follows:
+This will generate two executables called `higgsfo-pt` and `higgsfo-n` in the `builddir` 
+directory. To run the code, use one of the run cards in the `runcards` folder as follows:
 ```bash
-./higgs ../runcards/inputfile.yaml
+./higgsfo-n ../runcards/Higgs-FO-as-N.yaml    (for results as a function of N)
+./higgsfo-pt ../runcards/Higgs-FO-as-pt.yaml  (for results as a function of pt)
 ```
 
-Every time changes are made, the code can be re-compiled by running `meson compile`
+Every time changes are made, the code can be re-compiled by just running `meson compile`
 inside the `builddir` directory.
 
 
@@ -55,3 +58,15 @@ meson install
 ```
 This, by default, will install the header files in `/{prefix}/include/higgs-fo` and
 add `higgsfo.pc` to the PKG path.
+
+```python
+@misc{
+    Rabemananjara_Stegeman_2021,
+    title={N3PDF/HpT-MON: HpT-MON-v1.0.1},
+    url={https://zenodo.org/record/4903918},
+    DOI={10.5281/ZENODO.4903918},
+    author={Rabemananjara, Tanjona and Stegeman, Roy}, 
+    year={2021}, 
+    month={Jun} 
+} 
+```

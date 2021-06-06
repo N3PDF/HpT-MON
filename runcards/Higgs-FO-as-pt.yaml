@@ -1,5 +1,5 @@
 sectype : partonic
-outfile : higgspt
+outfile : higgsfo_pt
 
 # pdf name
 pdfname : PDF4LHC15_nnlo_100
@@ -43,4 +43,4 @@ y2      : +10
 channel : 0
 
 # mellin moment
-N      : 10
+N       : 2.5

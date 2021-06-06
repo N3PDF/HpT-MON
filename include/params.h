@@ -20,15 +20,15 @@
 
 #include <string>
 
-struct PhysParams{
-    int nc;
-    int nf;
-    double mh;
-    double mur;
-    double muf;
-    double alphas;
-    double sroot;
-    double sigma0;
+struct PhysParams {
+  int nc;
+  int nf;
+  double mh;
+  double mur;
+  double muf;
+  double alphas;
+  double sroot;
+  double sigma0;
 };
 
 extern PhysParams globalStruct;

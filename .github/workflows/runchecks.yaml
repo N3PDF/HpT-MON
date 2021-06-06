@@ -65,11 +65,11 @@ jobs:
 
         pkg-config --libs yaml-cpp
         echo "[+] Run LO results:"
-        ./higgs ../runcards/higgspt-partonic-gg-lo.yaml
-        ./higgs ../runcards/higgspt-hadronic-lo.yaml
+        ./higgsfo-pt ../runcards/higgspt-partonic-gg-lo.yaml
+        ./higgsfo-pt ../runcards/higgspt-hadronic-lo.yaml
         echo "[+] Run NLO results:"
-        ./higgs ../runcards/higgspt-partonic-gg-nlo.yaml
-        ./higgs ../runcards/higgspt-hadronic-nlo.yaml
+        ./higgsfo-pt ../runcards/higgspt-partonic-gg-nlo.yaml
+        ./higgsfo-pt ../runcards/higgspt-hadronic-nlo.yaml
 
         mkdir -p results
         echo "Bot report from $(git rev-parse --short HEAD)" >> results/report.md
