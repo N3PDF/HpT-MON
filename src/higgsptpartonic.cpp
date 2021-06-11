@@ -715,19 +715,19 @@ double HiggsDpTpartonic::deltapartonic(double pt, double nn, double zz) {
   if (ORD >= 0) {
     switch (CHANNEL) {
       case (0): {
-        result += gg0(sh, th, uh, MH2);
+        result += 0.;
       }  // gg-channel
       break;
       case (1): {
-        result += gq0(sh, th, uh);
+        result += 0.;
       }  // gq-channel
       break;
       case (2): {
-        result += qg0(sh, th, uh);
+        result += 0.;
       }  // qg-channel
       break;
       case (3): {
-        result += qqb0(sh, th, uh);
+        result += 0.;
       }  // qqb-channel
       break;
     }
