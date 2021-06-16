@@ -9,15 +9,15 @@ pdfname : PDF4LHC15_nnlo_100
 # 1<==>(NLO)
 order   : 1
 
-# N bins
-Nmin    : 2
-Nmax    : 10
-Nbin    : 0.1
+# N bins, now x-bins
+Nmin    : 1e-8
+Nmax    : 1e-5
+Nbin    : 1e-9
 
 # relevant scales in GeV
 mh      : 125		# mass of colorless final state
-mur     : 165 	# renormalization scale
-muf     : 165		# factorization scale
+mur     : 125 	# renormalization scale
+muf     : 125		# factorization scale
 
 # 0<==>large top mass limit
 inorm   : 0
@@ -43,4 +43,5 @@ y2      : +10
 channel : 0
 
 # pt value
-pt      : 5
+pt      : 88
+

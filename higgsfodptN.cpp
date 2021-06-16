@@ -108,6 +108,7 @@ int main(int argc, char* argv[]) {
     LHAPDF::initPDFSetByName(pdfname);
     double _as = LHAPDF::alphasPDF(_mur);
     double _sigma0 = factor*gevpb*std::pow(_as,2);
+    _sigma0 = 1;
     std::cout << std::setprecision(15) << _as << std::endl;
 
     // Define parameters
