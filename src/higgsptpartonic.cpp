@@ -717,6 +717,7 @@ double HiggsDpTpartonic::deltapartonic(double pt, double nn, double zz) {
     switch (CHANNEL) {
       case (0): {
         result += gg0(sh, th, uh, MH2);
+        result = 0;
       }  // gg-channel
       break;
       case (1): {
@@ -834,8 +835,6 @@ double HiggsDpTpartonic::deltapartonic(double pt, double nn, double zz) {
 
   // why is this here?
   result *= 2;
-
-  result = 0;
 
   return result;
 }

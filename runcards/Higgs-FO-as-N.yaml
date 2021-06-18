@@ -7,12 +7,12 @@ pdfname : PDF4LHC15_nnlo_100
 # order
 # 0<==>(LO)
 # 1<==>(NLO)
-order   : 1
+order   : 0
 
 # N bins, now x-bins
-Nmin    : 1e-8
-Nmax    : 1e-5
-Nbin    : 1e-9
+Nmin    : 20
+Nmax    : 20
+Nbin    : 1e8
 
 # relevant scales in GeV
 mh      : 125		# mass of colorless final state
@@ -43,5 +43,5 @@ y2      : +10
 channel : 0
 
 # pt value
-pt      : 88
+pt      : 130
 
