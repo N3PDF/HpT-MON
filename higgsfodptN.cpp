@@ -127,17 +127,17 @@ int main(int argc, char* argv[]) {
 
     // Construct output fie
     std::ofstream output_file(filename);
-    output_file << "# Process type         : " << sectype << "\n"
-                << "# PDF set name         : " << pdfname << "\n"
-                << "# Fixed Order          : " << order   << "\n"
-                << "# Partonic channel     : " << channel << "\n"
-                << "# Center of M.E. (GeV) : " << _sroot  << "\n"
-                << "# Higgs mass (GeV)     : " << _mh     << "\n"
-                << "# Renorm. scale (GeV)  : " << _mur    << "\n"
-                << "# Fact. scale (GeV)    : " << _muf    << "\n";
+    // output_file << "# Process type         : " << sectype << "\n"
+    //             << "# PDF set name         : " << pdfname << "\n"
+    //             << "# Fixed Order          : " << order   << "\n"
+    //             << "# Partonic channel     : " << channel << "\n"
+    //             << "# Center of M.E. (GeV) : " << _sroot  << "\n"
+    //             << "# Higgs mass (GeV)     : " << _mh     << "\n"
+    //             << "# Renorm. scale (GeV)  : " << _mur    << "\n"
+    //             << "# Fact. scale (GeV)    : " << _muf    << "\n";
     const int space = 16;
-    output_file << "# [N values]" << std::setw(space) << "[dHpt (pb)]"
-                << std::setw(space) << "[error (pb)]" << "\n";
+    // output_file << "# [N values]" << std::setw(space) << "[dHpt (pb)]"
+    //             << std::setw(space) << "[error (pb)]" << "\n";
 
     double nn = Nmin;
     std::vector<double> results;
@@ -145,18 +145,18 @@ int main(int argc, char* argv[]) {
         if (sectype == "hadronic") {
             results = higgshard.higgsdpt(pt,y1,y2);
         } else if (sectype == "partonic") {
-            results = higgspart.partonichiggsdpt(pt,nn);
+            results = higgspart.partonichiggsdpt(pt,std::pow(10,nn));
         } else {
             std::cout << "Error in entry sectype!" << std::endl;
             exit(EXIT_FAILURE);
         }
 
         // Generate some output logs & write to output file
-        printf("N=%e: dHdpt = %e +- %e. \n", nn, results[0], results[1]);
+        printf("N=%e: dHdpt = %e +- %e. \n", std::pow(10,nn), results[0], results[1]);
         output_file.setf(std::ios_base::scientific);
-        output_file << nn << std::setw(space)
-                    << results[0] << std::setw(space)
-                    << results[1] << "\n";
+        output_file << std::pow(10,nn) << std::setw(space)
+                    << results[0] << std::setw(space) << "\n";
+                    // << results[1] << "\n";
         output_file.flush();
 
         nn += Nbin;

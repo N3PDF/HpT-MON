@@ -65,6 +65,7 @@ class HiggsDpTpartonic {
   // partonic cross-section
   double deltapartonic(double pt, double nn, double zz);
   double distrpartonic(double pt, double nn, double zz1, double zz2);
+  double distrpartoniccross(double pt, double nn, double zz1, double zz2);
 
  private:
   int NF, ORD, CHANNEL;
