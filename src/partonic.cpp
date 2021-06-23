@@ -65,7 +65,8 @@ double CrossHiggs::ExtractDistrPartonic(double pt, double nn, double zz1,
   // agreement with
   //       threshold expanded and full LO.
   // TODO: also add a `cross' distribution to accomodate for the qg-channels
-  double distres = 2. * higgs.distrpartonic(pt, nn, zz1, zz2);
+  double distres = higgs.distrpartonic(pt, nn, zz1, zz2);
+  distres += higgs.distrcrosspartonic(pt, nn, zz1, zz2);
   double xsection = SIGMA0 * (aass / (2. * M_PI)) * distres;
   return xsection;
 }
