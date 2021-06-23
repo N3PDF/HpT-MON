@@ -1,5 +1,5 @@
 sectype : partonic
-outfile : higgsfo_N
+outfile : higgsfo_x
 
 # pdf name
 pdfname : PDF4LHC15_nnlo_100
@@ -10,9 +10,9 @@ pdfname : PDF4LHC15_nnlo_100
 order   : 1
 
 # N bins, now x-bins
-Nmin    : 1e-8
-Nmax    : 1e-5
-Nbin    : 1e-9
+Nmin    : -12
+Nmax    : -3
+Nbin    : 0.1
 
 # relevant scales in GeV
 mh      : 125		# mass of colorless final state
