@@ -835,8 +835,6 @@ double HiggsDpTpartonic::deltapartonic(double pt, double nn, double zz) {
   // why is this here?
   result *= 2;
 
-  result = 0;
-
   return result;
 }
 //==============================================================================================//
