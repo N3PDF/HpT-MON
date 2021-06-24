@@ -711,8 +711,6 @@ double HiggsDpTpartonic::deltapartonic(double pt, double nn, double zz) {
   // toghether with setting QQ2=0 is needed to properly handle the delta(Q²)
   // term.
   double jac = 1. / sqrt(std::pow(sh + MH2 - QQ2, 2) - 4. * sh * mt2);
-  // std::cout << gg0(sh, th, uh, MH2) *jac /sh << std::endl;
-
 
   // compute terms proportional to delta(Q^2)
   if (ORD >= 0) {
