@@ -50,18 +50,19 @@ int integration::CubaIntegrator(
   static const int nvec = 1;
   // static const int spin = -1;
   static const int maxpass = 5;
-  static const int mineval = 0;
-  static const int nnew = 1000;
-  static const int nstart = 1000;
-  static const int nbatch = 1000;
-  static const int nincrease = 500;
+  static const int mineval = 1000;
+  static const int nnew = 1e5;
+  static const int nmin = 1;
+  static const int nstart = 1e6;
+  static const int nbatch = 1e4;
+  static const int nincrease = 5e5;
   static const int ldxgiven = ndim;
-  static const int maxeval = 100000;
+  static const int maxeval = 1e9;
   static const int verbose = verbos;
   static const double border = 0.1;
   static const double maxchisq = 10.;
-  static const double epsabs = 1e-15;
-  static const double flatness = 25.;
+  static const double epsabs = 1e-100;
+  static const double flatness = 1;
   static const double mindeviation = 0.25;
   const char *statefile = NULL;
 
@@ -82,7 +83,7 @@ int integration::CubaIntegrator(
       break;
     case 1:
       Suave(ndim, ncomp, func, par, nvec, prec, epsabs, verbose, seed, mineval,
-            maxeval, nnew, 5, flatness, statefile, NULL, &nregions, &neval,
+            maxeval, nnew, nmin, flatness, statefile, NULL, &nregions, &neval,
             fail, ris, err, proba);
       break;
     case 2:
@@ -119,7 +120,7 @@ double integration::IntegrateDeltaPartonic(int method,
                                            double(Func)(double, void *),
                                            void *pp, double *error) {
   int fail;
-  double prec = 1e-8;
+  double prec = 1e-3;
   double *res = NULL;
   double *err = NULL;
   double *prb = NULL;
@@ -156,7 +157,7 @@ double integration::IntegrateDistrPartonic(int method,
                                            double(Func)(double, double, void *),
                                            void *pp, double *error) {
   int fail;
-  double prec = 1e-8;
+  double prec = 1e-3;
   double *res = NULL;
   double *err = NULL;
   double *prb = NULL;
@@ -198,7 +199,7 @@ double integration::IntegrateDeltaHadronic(int method,
                                            double(Func)(double, double, void *),
                                            void *pp, double *error) {
   int fail;
-  double prec = 1e-8;
+  double prec = 1e-3;
   double *res = NULL;
   double *err = NULL;
   double *prb = NULL;
@@ -241,7 +242,7 @@ double integration::IntegrateDistrHadronic(int method,
                                                         void *),
                                            void *pp, double *error) {
   int fail;
-  double prec = 1e-8;
+  double prec = 1e-3;
   double *res = NULL;
   double *err = NULL;
   double *prb = NULL;

@@ -11,8 +11,8 @@ order   : 1
 
 # N bins, now x-bins
 Nmin    : -12
-Nmax    : -3
-Nbin    : 0.1
+Nmax    : -1
+Nbin    : 0.5
 
 # relevant scales in GeV
 mh      : 125		# mass of colorless final state
