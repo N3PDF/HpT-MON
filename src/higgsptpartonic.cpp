@@ -690,9 +690,8 @@ double HiggsDpTpartonic::deltapartonic(double pt, double nn, double zz) {
   // and delta(Q^2) in the SINGULAR part of G &S. These are    //
   // given in Eqs. (3.17), (3.20), (3.24), (3.28).             //
   ///////////////////////////////////////////////////////////////
-  double xx = nn;
+  double xx = zz;
   double result = 0;
-  zz=1;   // unused integration variable
 
   // This function calculates the terms of the cross section proportional to
   // delta(Q²)
@@ -717,7 +716,7 @@ double HiggsDpTpartonic::deltapartonic(double pt, double nn, double zz) {
     switch (CHANNEL) {
       case (0): {
         result += gg0(sh, th, uh, MH2);
-        result = 0;
+        result = 0; // set LO to zero for the time being
       }  // gg-channel
       break;
       case (1): {
@@ -835,14 +834,14 @@ double HiggsDpTpartonic::deltapartonic(double pt, double nn, double zz) {
 
   // Jacobian
   result *= jac;
-
+  // Mellin transform
+  result *= std::pow(xx, nn - 1);
   // 1/sh as in Eq. 2.4 of G&S
   result *= 1. / sh;
-
   // dsigma/pt² to dsigma/dpt
   result *= 2. * pt;
-
-  // rapidity can be expressed in Q² in two ways
+  // rapidity can be defined in two ways, see Eq. (B.6) and the paragraph
+  // below in Ravindran et al. (2002)
   result *= 2;
 
   return result;
@@ -862,10 +861,9 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1,
   ////////////////////////////////////////////////////////////////
   double nonsingular = 0, a1 = 0, b1 = 0, c1 = 0, a10 = 0, b10 = 0;
 
-  zz2=1;            //unused integration variable
   double qq = zz1;  // qq = QQ2/QQ2max is an integration variable used to
                     // integrate out rapidity
-  double xx = nn;   // xx = Q²/sh
+  double xx = zz2;   // xx = Q²/sh
 
   double tiny = 1e-12;
   if (xx < tiny || xx > 1. - tiny) {
@@ -1050,21 +1048,19 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1,
   double cfinal = c1 * jac1;
   double nonsingularfinal = nonsingular * jac1;
 
-
-
   // nonsingular = 0;
   double result = afinal + bfinal + cfinal + nonsingularfinal;
-
+  
+  // Mellin transform
+  result *= std::pow(xx, nn - 1);
   // dsigma/pt² to dsigma/dpt
   result *= 2. * pt;
-
   // 1/sh as in Eq. 2.4 of G&S
   result *= 1. / sh;
-
-  // rapidity can be expressed in Q² in two ways
+  // rapidity can be defined in two ways, see Eq. (B.6) and the paragraph
+  // below in Ravindran et al. (2002)
   result *= 2.;
 
-  // result = 0;
   return result;
 }
 
@@ -1080,10 +1076,9 @@ double HiggsDpTpartonic::distrpartoniccross(double pt, double nn, double zz1,
   ////////////////////////////////////////////////////////////////
   double nonsingular = 0, a1 = 0, b1 = 0, c1 = 0, a10 = 0, b10 = 0;
 
-  zz2=1;            //unused integration variable
   double qq = zz1;  // qq = QQ2/QQ2max is an integration variable used to
                     // integrate out rapidity
-  double xx = nn;   // xx = Q²/sh
+  double xx = zz2;   // xx = Q²/sh
 
   double tiny = 1e-12;
   if (xx < tiny || xx > 1. - tiny) {
@@ -1268,21 +1263,19 @@ double HiggsDpTpartonic::distrpartoniccross(double pt, double nn, double zz1,
   double cfinal = c1 * jac1;
   double nonsingularfinal = nonsingular * jac1;
 
-
-
   // nonsingular = 0;
   double result = afinal + bfinal + cfinal + nonsingularfinal;
-
+  
+  // Mellin transform
+  result *= std::pow(xx, nn - 1);
   // dsigma/pt² to dsigma/dpt
   result *= 2. * pt;
-
   // 1/sh as in Eq. 2.4 of G&S
   result *= 1. / sh;
-
-  // rapidity can be expressed in Q² in two ways
+  // rapidity can be defined in two ways, see Eq. (B.6) and the paragraph
+  // below in Ravindran et al. (2002)
   result *= 2.;
 
-  // result = 0;
   return result;
 }
 
