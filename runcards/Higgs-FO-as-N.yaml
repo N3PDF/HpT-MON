@@ -1,5 +1,5 @@
 sectype : partonic
-outfile : higgsfo_x
+outfile : higgsfo_N
 
 # pdf name
 pdfname : PDF4LHC15_nnlo_100
@@ -10,8 +10,8 @@ pdfname : PDF4LHC15_nnlo_100
 order   : 1
 
 # N bins, now x-bins
-Nmin    : -12
-Nmax    : -3
+Nmin    : 2e-1
+Nmax    : 12
 Nbin    : 0.1
 
 # relevant scales in GeV
