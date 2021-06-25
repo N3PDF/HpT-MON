@@ -127,17 +127,17 @@ int main(int argc, char* argv[]) {
 
     // Construct output fie
     std::ofstream output_file(filename);
-    output_file << "# Process type         : " << sectype << "\n"
-                << "# PDF set name         : " << pdfname << "\n"
-                << "# Fixed Order          : " << order   << "\n"
-                << "# Partonic channel     : " << channel << "\n"
-                << "# Center of M.E. (GeV) : " << _sroot  << "\n"
-                << "# Higgs mass (GeV)     : " << _mh     << "\n"
-                << "# Renorm. scale (GeV)  : " << _mur    << "\n"
-                << "# Fact. scale (GeV)    : " << _muf    << "\n";
+    // output_file << "# Process type         : " << sectype << "\n"
+    //             << "# PDF set name         : " << pdfname << "\n"
+    //             << "# Fixed Order          : " << order   << "\n"
+    //             << "# Partonic channel     : " << channel << "\n"
+    //             << "# Center of M.E. (GeV) : " << _sroot  << "\n"
+    //             << "# Higgs mass (GeV)     : " << _mh     << "\n"
+    //             << "# Renorm. scale (GeV)  : " << _mur    << "\n"
+    //             << "# Fact. scale (GeV)    : " << _muf    << "\n";
     const int space = 16;
-    output_file << "# [N values]" << std::setw(space) << "[dHpt (pb)]"
-                << std::setw(space) << "[error (pb)]" << "\n";
+    // output_file << "# [N values]" << std::setw(space) << "[dHpt (pb)]"
+    //             << std::setw(space) << "[error (pb)]" << "\n";
 
     double nn = Nmin;
     std::vector<double> results;
