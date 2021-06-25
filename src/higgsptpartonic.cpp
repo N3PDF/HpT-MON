@@ -748,13 +748,6 @@ double HiggsDpTpartonic::deltapartonic(double pt, double nn, double zz) {
             std::pow(log(MH2 / (MH2 - th)), 2) +
             std::pow(log(MH2 / (MH2 - uh)), 2) + 2. * Li2(1. - MH2 / sh) +
             2. * Li2(MH2 / (MH2 - th)) + 2. * Li2(MH2 / (MH2 - uh));
-        uu =
-            0.5 * std::pow(log(uh / th), 2) + std::pow(M_PI, 2) / 3. -
-            log(sh / MH2) * log(-th / MH2) - log(sh / MH2) * log(-uh / MH2) -
-            log(-uh / MH2) * log(-th / MH2) + std::pow(log(MH2 / sh), 2) +
-            std::pow(log(MH2 / (MH2 - th)), 2) +
-            std::pow(log(MH2 / (MH2 - uh)), 2) + 2. * Li2(1. - MH2 / sh) +
-            2. * Li2(MH2 / (MH2 - th)) + 2. * Li2(MH2 / (MH2 - uh));
         double de = 1.5 * beta0 * (log(-MUR2 / th) + log(-MUR2 / uh)) +
                     67. / 6. - 5. / 9. * NF;
         result += aass / (2. * M_PI) *
@@ -1048,7 +1041,6 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1,
   double cfinal = c1 * jac1;
   double nonsingularfinal = nonsingular * jac1;
 
-  // nonsingular = 0;
   double result = afinal + bfinal + cfinal + nonsingularfinal;
   
   // Mellin transform
@@ -1263,7 +1255,6 @@ double HiggsDpTpartonic::distrpartoniccross(double pt, double nn, double zz1,
   double cfinal = c1 * jac1;
   double nonsingularfinal = nonsingular * jac1;
 
-  // nonsingular = 0;
   double result = afinal + bfinal + cfinal + nonsingularfinal;
   
   // Mellin transform
