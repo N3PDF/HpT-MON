@@ -1194,6 +1194,9 @@ double HiggsDpTpartonic::distrpartoniccross(double pt, double nn, double zz1,
     } break;
   }
 
+  // double a10factor = log(1. - za) / (1. - za);
+  // double b10factor = 1. / (1. - za);
+
   // Here we deal with the za=1 part of the plus distribution. za=1 corresponds
   // to setting QQ2=0.
   QQ2 = 0;
