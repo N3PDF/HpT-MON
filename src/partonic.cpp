@@ -65,8 +65,8 @@ double CrossHiggs::ExtractDistrPartonic(double pt, double nn, double zz1,
   // agreement with
   //       threshold expanded and full LO.
   // TODO: also add a `cross' distribution to accomodate for the qg-channels
-  double distres = higgs.distrpartonic(pt, nn, zz1, zz2);
-  distres += higgs.distrpartoniccross(pt, nn, zz1, zz2);
+  double distres = 2.*higgs.distrpartonic(pt, nn, zz1, zz2);
+  // distres += higgs.distrpartoniccross(pt, nn, zz1, zz2);
   double xsection = SIGMA0 * (aass / (2. * M_PI)) * distres;
   return xsection;
 }
@@ -88,7 +88,7 @@ std::vector<double> CrossHiggs::partonichiggsdpt(double pt, double nn) {
   // y2:  upper boundary of the rapidity yh       //
   //////////////////////////////////////////////////
 
-  int method = 0;
+  int method = 1;
   double deltres, delterr;
   double distres = 0, disterr = 0;
   std::vector<double> results;

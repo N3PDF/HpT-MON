@@ -973,16 +973,28 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1,
   // Here we deal with the za=1 part of the plus distribution. za=1 corresponds
   // to setting QQ2=0.
   QQ2 = 0;
-  uh = 0.5 *
-       (QQ2 + MH2 - sh - sqrt(std::pow(sh + MH2 - QQ2, 2) - 4. * sh * mt2));
   th = 0.5 *
+       (QQ2 + MH2 - sh - sqrt(std::pow(sh + MH2 - QQ2, 2) - 4. * sh * mt2));
+  uh = 0.5 *
        (QQ2 + MH2 - sh + sqrt(std::pow(sh + MH2 - QQ2, 2) - 4. * sh * mt2));
-  za = -th / (QQ2 - th);
-  double jac10 = QQ2max / sqrt(std::pow(sh + MH2 - QQ2, 2) - 4. * sh * mt2);
 
-  double a10factor =
-      (log(qq) / qq + log(QQ2max * za / -th) / qq) / QQ2max * (-th / za);
-  double b10factor = 1. / qq / QQ2max * (-th / za);
+  double a10factor = log(1. - za) / (1. - za);
+  double b10factor = 1. / (1. - za);
+
+  za = -th / (QQ2 - th);
+
+  // Similar to the a1factor and b1factor above, also a10factor anb b10 factor can be written 
+  // either in terms of za or in terms of qq as below.
+  // double a10factor =
+  //     (log(qq) / qq + log(QQ2max * za / -th) / qq) / QQ2max * (-th / za);
+  // double adeltafactor =
+  //     0.5 * std::pow(log(-QQ2max / th), 2) / QQ2max * (-th / za);
+  // a10factor -= adeltafactor;
+  // double b10factor = 1. / qq / QQ2max * (-th / za);
+  // double bdeltafactor = log(-QQ2max / th) / QQ2max * (-th / za);
+  // b10factor -= bdeltafactor;
+
+  double jac10 = QQ2max / sqrt(std::pow(sh + MH2 - QQ2, 2) - 4. * sh * mt2);
 
   shnew = za * sh;
   thnew = th;
@@ -1190,12 +1202,25 @@ double HiggsDpTpartonic::distrpartoniccross(double pt, double nn, double zz1,
        (QQ2 + MH2 - sh - sqrt(std::pow(sh + MH2 - QQ2, 2) - 4. * sh * mt2));
   uh = 0.5 *
        (QQ2 + MH2 - sh + sqrt(std::pow(sh + MH2 - QQ2, 2) - 4. * sh * mt2));
-  za = -th / (QQ2 - th);
-  double jac10 = QQ2max / sqrt(std::pow(sh + MH2 - QQ2, 2) - 4. * sh * mt2);
 
-  double a10factor =
-      (log(qq) / qq + log(QQ2max * za / -th) / qq) / QQ2max * (-th / za);
-  double b10factor = 1. / qq / QQ2max * (-th / za);
+
+  double a10factor = log(1. - za) / (1. - za);
+  double b10factor = 1. / (1. - za);
+
+  za = -th / (QQ2 - th);
+
+  // Similar to the a1factor and b1factor above, also a10factor anb b10 factor can be written 
+  // either in terms of za or in terms of qq as below.
+  // double a10factor =
+  //     (log(qq) / qq + log(QQ2max * za / -th) / qq) / QQ2max * (-th / za);
+  // double adeltafactor =
+  //     0.5 * std::pow(log(-QQ2max / th), 2) / QQ2max * (-th / za);
+  // a10factor -= adeltafactor;
+  // double b10factor = 1. / qq / QQ2max * (-th / za);
+  // double bdeltafactor = log(-QQ2max / th) / QQ2max * (-th / za);
+  // b10factor -= bdeltafactor;
+
+  double jac10 = QQ2max / sqrt(std::pow(sh + MH2 - QQ2, 2) - 4. * sh * mt2);
 
   shnew = za * sh;
   thnew = th;
@@ -1243,14 +1268,8 @@ double HiggsDpTpartonic::distrpartoniccross(double pt, double nn, double zz1,
     } break;
   }
 
-  double adeltafactor =
-      0.5 * std::pow(log(-QQ2max / th), 2) / QQ2max * (-th / za);
-  double bdeltafactor = log(-QQ2max / th) / QQ2max * (-th / za);
-
-  double bfinal = b1 * jac1 * b1factor - b10 * jac10 * b10factor +
-                  b10 * jac10 * bdeltafactor;
-  double afinal = a1 * jac1 * a1factor - a10 * jac10 * a10factor +
-                  a10 * jac10 * adeltafactor;
+  double bfinal = b1 * jac1 * b1factor - b10 * jac10 * b10factor;
+  double afinal = a1 * jac1 * a1factor - a10 * jac10 * a10factor;
   double cfinal = c1 * jac1;
   double nonsingularfinal = nonsingular * jac1;
 
