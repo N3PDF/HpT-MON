@@ -860,7 +860,7 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1,
   // multiplied by either delta(Q) or delta(Q^2) (both singular //
   // and non-Singular)                                          //
   ////////////////////////////////////////////////////////////////
-  double nonsingular = 0, a1 = 0, b1 = 0, c1 = 0, a10 = 0, b10 = 0;
+  double nonsingular = 0, a1 = 0, b1 = 0, c1 = 0, a10 = 0, b10 = 0, d10 = 0;
 
   zz2=1;            //unused integration variable
   double qq = zz1;  // qq = QQ2/QQ2max is an integration variable used to
@@ -988,7 +988,6 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1,
   za = -th / (QQ2 - th);
   double jac10 = QQ2max / sqrt(std::pow(sh + MH2 - QQ2, 2) - 4. * sh * mt2);
 
-
   double apolefactor =
       (log(qq) / qq + log(QQ2max * za / -th) / qq) / QQ2max * (-th / za);
   double adeltafactor =
@@ -998,11 +997,11 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1,
   double bpolefactor = 1. / qq / QQ2max * (-th / za);
   double b10factor = bpolefactor - bdeltafactor;
 
+  double d10factor = -th/za/QQ2max;
 
   shnew = za * sh;
   thnew = th;
   uhnew = za*(uh-MH2)+MH2;
-
 
   coeff(pt, uh, th, sh, MH2);
 
@@ -1015,6 +1014,7 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1,
           (1. / th * pgg(za) * log(-MUF2 * za / th) *
                gg0(shnew, thnew, uhnew, MH2) +
            za / th * big1 * log((QQ2 + pt * pt) * za / (-th)) + za / th * big2);
+      d10 += 1. / th * beta0 * log(-MUF2 * za / th) * gg0(shnew, thnew, uhnew, MH2);
     } break;
     case (1):  // gq-channel
     {
@@ -1049,9 +1049,10 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1,
   double bfinal = b1 * jac1 * b1factor - b10 * jac10 * b10factor;
   double afinal = a1 * jac1 * a1factor - a10 * jac10 * a10factor;
   double cfinal = c1 * jac1;
+  double dfinal = d10 * jac10 * d10factor;
   double nonsingularfinal = nonsingular * jac1;
 
-  double result = afinal + bfinal + cfinal + nonsingularfinal;
+  double result = afinal + bfinal + cfinal + dfinal + nonsingularfinal;
 
   // dsigma/pt² to dsigma/dpt
   result *= 2. * pt;
@@ -1076,7 +1077,7 @@ double HiggsDpTpartonic::distrpartoniccross(double pt, double nn, double zz1,
   // multiplied by either delta(Q) or delta(Q^2) (both singular //
   // and non-Singular)                                          //
   ////////////////////////////////////////////////////////////////
-  double nonsingular = 0, a1 = 0, b1 = 0, c1 = 0, a10 = 0, b10 = 0;
+  double nonsingular = 0, a1 = 0, b1 = 0, c1 = 0, a10 = 0, b10 = 0, d10 = 0;
 
   zz2=1;            //unused integration variable
   double qq = zz1;  // qq = QQ2/QQ2max is an integration variable used to
@@ -1194,9 +1195,6 @@ double HiggsDpTpartonic::distrpartoniccross(double pt, double nn, double zz1,
     } break;
   }
 
-  // double a10factor = log(1. - za) / (1. - za);
-  // double b10factor = 1. / (1. - za);
-
   // Here we deal with the za=1 part of the plus distribution. za=1 corresponds
   // to setting QQ2=0.
   QQ2 = 0;
@@ -1216,10 +1214,11 @@ double HiggsDpTpartonic::distrpartoniccross(double pt, double nn, double zz1,
   double bpolefactor = 1. / qq / QQ2max * (-th / za);
   double b10factor = bpolefactor - bdeltafactor;
 
+  double d10factor = -th/za/QQ2max;
+
   shnew = za * sh;
   thnew = th;
   uhnew = za*(uh-MH2)+MH2;
-
 
   coeff(pt, uh, th, sh, MH2);
 
@@ -1232,6 +1231,7 @@ double HiggsDpTpartonic::distrpartoniccross(double pt, double nn, double zz1,
           (1. / th * pgg(za) * log(-MUF2 * za / th) *
                gg0(shnew, thnew, uhnew, MH2) +
            za / th * big1 * log((QQ2 + pt * pt) * za / (-th)) + za / th * big2);
+      d10 += 1. / th * beta0 * log(-MUF2 * za / th) * gg0(shnew, thnew, uhnew, MH2);
     } break;
     case (1):  // gq-channel
     {
@@ -1266,9 +1266,10 @@ double HiggsDpTpartonic::distrpartoniccross(double pt, double nn, double zz1,
   double bfinal = b1 * jac1 * b1factor - b10 * jac10 * b10factor;
   double afinal = a1 * jac1 * a1factor - a10 * jac10 * a10factor;
   double cfinal = c1 * jac1;
+  double dfinal =  d10 * jac10 * d10factor;
   double nonsingularfinal = nonsingular * jac1;
 
-  double result = afinal + bfinal + cfinal + nonsingularfinal;
+  double result = afinal + bfinal + cfinal + dfinal + nonsingularfinal;
 
   // dsigma/pt² to dsigma/dpt
   result *= 2. * pt;
