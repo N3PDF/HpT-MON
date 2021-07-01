@@ -978,9 +978,9 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1,
   // Here we deal with the za=1 part of the plus distribution. za=1 corresponds
   // to setting QQ2=0.
   QQ2 = 0;
-  th = 0.5 *
-       (QQ2 + MH2 - sh - sqrt(std::pow(sh + MH2 - QQ2, 2) - 4. * sh * mt2));
   uh = 0.5 *
+       (QQ2 + MH2 - sh - sqrt(std::pow(sh + MH2 - QQ2, 2) - 4. * sh * mt2));
+  th = 0.5 *
        (QQ2 + MH2 - sh + sqrt(std::pow(sh + MH2 - QQ2, 2) - 4. * sh * mt2));
 
   za = -th / (QQ2 - th);

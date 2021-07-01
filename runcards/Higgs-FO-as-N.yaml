@@ -10,7 +10,7 @@ pdfname : PDF4LHC15_nnlo_100
 order   : 1
 
 # N bins, now x-bins
-Nmin    : 0.001
+Nmin    : 0.4
 Nmax    : 3
 Nbin    : 0.1
 
