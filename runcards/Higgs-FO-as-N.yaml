@@ -10,8 +10,8 @@ pdfname : PDF4LHC15_nnlo_100
 order   : 1
 
 # N bins, now x-bins
-Nmin    : 2e-1
-Nmax    : 12
+Nmin    : 0.001
+Nmax    : 3
 Nbin    : 0.1
 
 # relevant scales in GeV

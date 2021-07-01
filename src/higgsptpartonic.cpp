@@ -693,6 +693,11 @@ double HiggsDpTpartonic::deltapartonic(double pt, double nn, double zz) {
   double xx = zz;
   double result = 0;
 
+  double tiny = 1e-12;
+  if (xx < tiny || xx > 1. - tiny) {
+    return 0.;
+  }
+
   // This function calculates the terms of the cross section proportional to
   // delta(Q²)
   double QQ2 = 0;
