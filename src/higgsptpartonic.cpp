@@ -692,7 +692,7 @@ double HiggsDpTpartonic::deltapartonic(double pt, double nn, double zz) {
   ///////////////////////////////////////////////////////////////
   double xx = nn;
   double result = 0;
-  zz=1;   // unused integration variable
+  zz = 1;  // unused integration variable
 
   // This function calculates the terms of the cross section proportional to
   // delta(Q²)
@@ -740,8 +740,8 @@ double HiggsDpTpartonic::deltapartonic(double pt, double nn, double zz) {
       // part of the xsec that is also calculated in this function.
       case (0):  // gg-channel
       {
-        // dominant contribution in small-x are the terms multiplied by uu. 
-        // specifically the logs (not Li2) dominate uu 
+        // dominant contribution in small-x are the terms multiplied by uu.
+        // specifically the logs (not Li2) dominate uu
         double uu =
             0.5 * std::pow(log(uh / th), 2) + std::pow(M_PI, 2) / 3. -
             log(sh / MH2) * log(-th / MH2) - log(sh / MH2) * log(-uh / MH2) -
@@ -749,13 +749,12 @@ double HiggsDpTpartonic::deltapartonic(double pt, double nn, double zz) {
             std::pow(log(MH2 / (MH2 - th)), 2) +
             std::pow(log(MH2 / (MH2 - uh)), 2) + 2. * Li2(1. - MH2 / sh) +
             2. * Li2(MH2 / (MH2 - th)) + 2. * Li2(MH2 / (MH2 - uh));
-        uu =
-            0.5 * std::pow(log(uh / th), 2) + std::pow(M_PI, 2) / 3. -
-            log(sh / MH2) * log(-th / MH2) - log(sh / MH2) * log(-uh / MH2) -
-            log(-uh / MH2) * log(-th / MH2) + std::pow(log(MH2 / sh), 2) +
-            std::pow(log(MH2 / (MH2 - th)), 2) +
-            std::pow(log(MH2 / (MH2 - uh)), 2) + 2. * Li2(1. - MH2 / sh) +
-            2. * Li2(MH2 / (MH2 - th)) + 2. * Li2(MH2 / (MH2 - uh));
+        uu = 0.5 * std::pow(log(uh / th), 2) + std::pow(M_PI, 2) / 3. -
+             log(sh / MH2) * log(-th / MH2) - log(sh / MH2) * log(-uh / MH2) -
+             log(-uh / MH2) * log(-th / MH2) + std::pow(log(MH2 / sh), 2) +
+             std::pow(log(MH2 / (MH2 - th)), 2) +
+             std::pow(log(MH2 / (MH2 - uh)), 2) + 2. * Li2(1. - MH2 / sh) +
+             2. * Li2(MH2 / (MH2 - th)) + 2. * Li2(MH2 / (MH2 - uh));
         double de = 1.5 * beta0 * (log(-MUR2 / th) + log(-MUR2 / uh)) +
                     67. / 6. - 5. / 9. * NF;
         result += aass / (2. * M_PI) *
@@ -862,7 +861,7 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1,
   ////////////////////////////////////////////////////////////////
   double nonsingular = 0, a1 = 0, b1 = 0, c1 = 0, a10 = 0, b10 = 0, d10 = 0;
 
-  zz2=1;            //unused integration variable
+  zz2 = 1;          // unused integration variable
   double qq = zz1;  // qq = QQ2/QQ2max is an integration variable used to
                     // integrate out rapidity
   double xx = nn;   // xx = Q²/sh
@@ -891,15 +890,16 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1,
   // double a1factor = log(1. - za) / (1. - za);
   // double b1factor = 1. / (1. - za);
   // Alternatively one can write `a1factor' and `b1factor' in terms of qq:
-  double a1factor = (log(qq)/qq+log(QQ2max*za/-th)/qq)/QQ2max*(-th/za);
-  double b1factor = 1./qq/QQ2max*(-th/za);
+  double a1factor =
+      (log(qq) / qq + log(QQ2max * za / -th) / qq) / QQ2max * (-th / za);
+  double b1factor = 1. / qq / QQ2max * (-th / za);
 
   coeff(pt, uh, th, sh, MH2);
   REG(pt, uh, th, sh, MH2);
 
   double shnew = za * sh;
   double thnew = th;
-  double uhnew = za*(uh-MH2)+MH2;
+  double uhnew = za * (uh - MH2) + MH2;
 
   switch (CHANNEL) {
     // a1:: (log(1-za)/(1-za))+ terms
@@ -997,11 +997,11 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1,
   double bpolefactor = 1. / qq / QQ2max * (-th / za);
   double b10factor = bpolefactor - bdeltafactor;
 
-  double d10factor = -th/za/QQ2max;
+  double d10factor = -th / za / QQ2max;
 
   shnew = za * sh;
   thnew = th;
-  uhnew = za*(uh-MH2)+MH2;
+  uhnew = za * (uh - MH2) + MH2;
 
   coeff(pt, uh, th, sh, MH2);
 
@@ -1014,7 +1014,8 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1,
           (1. / th * pgg(za) * log(-MUF2 * za / th) *
                gg0(shnew, thnew, uhnew, MH2) +
            za / th * big1 * log((QQ2 + pt * pt) * za / (-th)) + za / th * big2);
-      d10 += 1. / th * beta0 * log(-MUF2 * za / th) * gg0(shnew, thnew, uhnew, MH2);
+      d10 += 1. / th * beta0 * log(-MUF2 * za / th) *
+             gg0(shnew, thnew, uhnew, MH2);
     } break;
     case (1):  // gq-channel
     {
@@ -1069,9 +1070,8 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1,
 
 //==============================================================================================//
 
-
 double HiggsDpTpartonic::distrpartoniccross(double pt, double nn, double zz1,
-                                       double zz2) {
+                                            double zz2) {
   ////////////////////////////////////////////////////////////////
   // This function computes the remaining terms that are not    //
   // multiplied by either delta(Q) or delta(Q^2) (both singular //
@@ -1079,7 +1079,7 @@ double HiggsDpTpartonic::distrpartoniccross(double pt, double nn, double zz1,
   ////////////////////////////////////////////////////////////////
   double nonsingular = 0, a1 = 0, b1 = 0, c1 = 0, a10 = 0, b10 = 0, d10 = 0;
 
-  zz2=1;            //unused integration variable
+  zz2 = 1;          // unused integration variable
   double qq = zz1;  // qq = QQ2/QQ2max is an integration variable used to
                     // integrate out rapidity
   double xx = nn;   // xx = Q²/sh
@@ -1108,15 +1108,16 @@ double HiggsDpTpartonic::distrpartoniccross(double pt, double nn, double zz1,
   // double a1factor = log(1. - za) / (1. - za);
   // double b1factor = 1. / (1. - za);
   // Alternatively one can write `a1factor' and `b1factor' in terms of qq:
-  double a1factor = (log(qq)/qq+log(QQ2max*za/-th)/qq)/QQ2max*(-th/za);
-  double b1factor = 1./qq/QQ2max*(-th/za);
+  double a1factor =
+      (log(qq) / qq + log(QQ2max * za / -th) / qq) / QQ2max * (-th / za);
+  double b1factor = 1. / qq / QQ2max * (-th / za);
 
   coeff(pt, uh, th, sh, MH2);
   REG(pt, uh, th, sh, MH2);
 
   double shnew = za * sh;
   double thnew = th;
-  double uhnew = za*(uh-MH2)+MH2;
+  double uhnew = za * (uh - MH2) + MH2;
 
   switch (CHANNEL) {
     // a1:: (log(1-za)/(1-za))+ terms
@@ -1214,11 +1215,11 @@ double HiggsDpTpartonic::distrpartoniccross(double pt, double nn, double zz1,
   double bpolefactor = 1. / qq / QQ2max * (-th / za);
   double b10factor = bpolefactor - bdeltafactor;
 
-  double d10factor = -th/za/QQ2max;
+  double d10factor = -th / za / QQ2max;
 
   shnew = za * sh;
   thnew = th;
-  uhnew = za*(uh-MH2)+MH2;
+  uhnew = za * (uh - MH2) + MH2;
 
   coeff(pt, uh, th, sh, MH2);
 
@@ -1231,7 +1232,8 @@ double HiggsDpTpartonic::distrpartoniccross(double pt, double nn, double zz1,
           (1. / th * pgg(za) * log(-MUF2 * za / th) *
                gg0(shnew, thnew, uhnew, MH2) +
            za / th * big1 * log((QQ2 + pt * pt) * za / (-th)) + za / th * big2);
-      d10 += 1. / th * beta0 * log(-MUF2 * za / th) * gg0(shnew, thnew, uhnew, MH2);
+      d10 += 1. / th * beta0 * log(-MUF2 * za / th) *
+             gg0(shnew, thnew, uhnew, MH2);
     } break;
     case (1):  // gq-channel
     {
@@ -1266,7 +1268,7 @@ double HiggsDpTpartonic::distrpartoniccross(double pt, double nn, double zz1,
   double bfinal = b1 * jac1 * b1factor - b10 * jac10 * b10factor;
   double afinal = a1 * jac1 * a1factor - a10 * jac10 * a10factor;
   double cfinal = c1 * jac1;
-  double dfinal =  d10 * jac10 * d10factor;
+  double dfinal = d10 * jac10 * d10factor;
   double nonsingularfinal = nonsingular * jac1;
 
   double result = afinal + bfinal + cfinal + dfinal + nonsingularfinal;
@@ -1285,4 +1287,3 @@ double HiggsDpTpartonic::distrpartoniccross(double pt, double nn, double zz1,
 }
 
 //==============================================================================================//
-
