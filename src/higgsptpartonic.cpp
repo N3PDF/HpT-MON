@@ -985,8 +985,8 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1,
 
   za = -th / (QQ2 - th);
 
-  // Similar to the a1factor and b1factor above, also a10factor anb b10 factor can be written 
-  // either in terms of za or in terms of qq as below.
+  // Similar to the a1factor and b1factor above, also a10factor anb b10 factor
+  // can be written either in terms of za or in terms of qq as below.
   double a10factor =
       (log(qq) / qq + log(QQ2max * za / -th) / qq) / QQ2max * (-th / za);
   double adeltafactor =
@@ -995,7 +995,7 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1,
   double b10factor = 1. / qq / QQ2max * (-th / za);
   double bdeltafactor = log(-QQ2max / th) / QQ2max * (-th / za);
   b10factor -= bdeltafactor;
-  double d10factor = -th/za/QQ2max;
+  double d10factor = -th / za / QQ2max;
 
   double jac10 = QQ2max / sqrt(std::pow(sh + MH2 - QQ2, 2) - 4. * sh * mt2);
 
@@ -1014,7 +1014,8 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1,
           (1. / th * pgg(za) * log(-MUF2 * za / th) *
                gg0(shnew, thnew, uhnew, MH2) +
            za / th * big1 * log((QQ2 + pt * pt) * za / (-th)) + za / th * big2);
-      d10 += 1. / th * beta0 * log(-MUF2 * za / th) * gg0(shnew, thnew, uhnew, MH2);
+      d10 += 1. / th * beta0 * log(-MUF2 * za / th) *
+             gg0(shnew, thnew, uhnew, MH2);
     } break;
     case (1):  // gq-channel
     {
@@ -1204,8 +1205,8 @@ double HiggsDpTpartonic::distrpartoniccross(double pt, double nn, double zz1,
 
   za = -th / (QQ2 - th);
 
-  // Similar to the a1factor and b1factor above, also a10factor anb b10 factor can be written 
-  // either in terms of za or in terms of qq as below.
+  // Similar to the a1factor and b1factor above, also a10factor anb b10 factor
+  // can be written either in terms of za or in terms of qq as below.
   double a10factor =
       (log(qq) / qq + log(QQ2max * za / -th) / qq) / QQ2max * (-th / za);
   double adeltafactor =
@@ -1214,7 +1215,7 @@ double HiggsDpTpartonic::distrpartoniccross(double pt, double nn, double zz1,
   double b10factor = 1. / qq / QQ2max * (-th / za);
   double bdeltafactor = log(-QQ2max / th) / QQ2max * (-th / za);
   b10factor -= bdeltafactor;
-  double d10factor = -th/za/QQ2max;
+  double d10factor = -th / za / QQ2max;
 
   double jac10 = QQ2max / sqrt(std::pow(sh + MH2 - QQ2, 2) - 4. * sh * mt2);
 
@@ -1233,7 +1234,8 @@ double HiggsDpTpartonic::distrpartoniccross(double pt, double nn, double zz1,
           (1. / th * pgg(za) * log(-MUF2 * za / th) *
                gg0(shnew, thnew, uhnew, MH2) +
            za / th * big1 * log((QQ2 + pt * pt) * za / (-th)) + za / th * big2);
-      d10 += 1. / th * beta0 * log(-MUF2 * za / th) * gg0(shnew, thnew, uhnew, MH2);
+      d10 += 1. / th * beta0 * log(-MUF2 * za / th) *
+             gg0(shnew, thnew, uhnew, MH2);
     } break;
     case (1):  // gq-channel
     {
