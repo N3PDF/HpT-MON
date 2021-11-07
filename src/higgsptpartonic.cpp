@@ -693,6 +693,11 @@ double HiggsDpTpartonic::deltapartonic(double pt, double nn, double zz) {
   double xx = zz;
   double result = 0;
 
+  double tiny = 1e-12;
+  if (xx < tiny || xx > 1. - tiny) {
+    return 0.;
+  }
+
   // This function calculates the terms of the cross section proportional to
   // delta(Q²)
   double QQ2 = 0;
@@ -852,7 +857,7 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1,
   // multiplied by either delta(Q) or delta(Q^2) (both singular //
   // and non-Singular)                                          //
   ////////////////////////////////////////////////////////////////
-  double nonsingular = 0, a1 = 0, b1 = 0, c1 = 0, a10 = 0, b10 = 0;
+  double nonsingular = 0, a1 = 0, b1 = 0, c1 = 0, a10 = 0, b10 = 0, d10 = 0;
 
   double qq = zz1;  // qq = QQ2/QQ2max is an integration variable used to
                     // integrate out rapidity
@@ -977,12 +982,22 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1,
        (QQ2 + MH2 - sh - sqrt(std::pow(sh + MH2 - QQ2, 2) - 4. * sh * mt2));
   th = 0.5 *
        (QQ2 + MH2 - sh + sqrt(std::pow(sh + MH2 - QQ2, 2) - 4. * sh * mt2));
-  za = -th / (QQ2 - th);
-  double jac10 = QQ2max / sqrt(std::pow(sh + MH2 - QQ2, 2) - 4. * sh * mt2);
 
+  za = -th / (QQ2 - th);
+
+  // Similar to the a1factor and b1factor above, also a10factor anb b10 factor can be written 
+  // either in terms of za or in terms of qq as below.
   double a10factor =
       (log(qq) / qq + log(QQ2max * za / -th) / qq) / QQ2max * (-th / za);
+  double adeltafactor =
+      0.5 * std::pow(log(-QQ2max / th), 2) / QQ2max * (-th / za);
+  a10factor -= adeltafactor;
   double b10factor = 1. / qq / QQ2max * (-th / za);
+  double bdeltafactor = log(-QQ2max / th) / QQ2max * (-th / za);
+  b10factor -= bdeltafactor;
+  double d10factor = -th/za/QQ2max;
+
+  double jac10 = QQ2max / sqrt(std::pow(sh + MH2 - QQ2, 2) - 4. * sh * mt2);
 
   shnew = za * sh;
   thnew = th;
@@ -999,6 +1014,7 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1,
           (1. / th * pgg(za) * log(-MUF2 * za / th) *
                gg0(shnew, thnew, uhnew, MH2) +
            za / th * big1 * log((QQ2 + pt * pt) * za / (-th)) + za / th * big2);
+      d10 += 1. / th * beta0 * log(-MUF2 * za / th) * gg0(shnew, thnew, uhnew, MH2);
     } break;
     case (1):  // gq-channel
     {
@@ -1030,18 +1046,13 @@ double HiggsDpTpartonic::distrpartonic(double pt, double nn, double zz1,
     } break;
   }
 
-  double adeltafactor =
-      0.5 * std::pow(log(-QQ2max / th), 2) / QQ2max * (-th / za);
-  double bdeltafactor = log(-QQ2max / th) / QQ2max * (-th / za);
-
-  double bfinal = b1 * jac1 * b1factor - b10 * jac10 * b10factor +
-                  b10 * jac10 * bdeltafactor;
-  double afinal = a1 * jac1 * a1factor - a10 * jac10 * a10factor +
-                  a10 * jac10 * adeltafactor;
+  double bfinal = b1 * jac1 * b1factor - b10 * jac10 * b10factor;
+  double afinal = a1 * jac1 * a1factor - a10 * jac10 * a10factor;
   double cfinal = c1 * jac1;
+  double dfinal = d10 * jac10 * d10factor;
   double nonsingularfinal = nonsingular * jac1;
 
-  double result = afinal + bfinal + cfinal + nonsingularfinal;
+  double result = afinal + bfinal + cfinal + dfinal + nonsingularfinal;
 
   // Mellin transform
   result *= std::pow(xx, nn - 1);
@@ -1065,7 +1076,7 @@ double HiggsDpTpartonic::distrpartoniccross(double pt, double nn, double zz1,
   // multiplied by either delta(Q) or delta(Q^2) (both singular //
   // and non-Singular)                                          //
   ////////////////////////////////////////////////////////////////
-  double nonsingular = 0, a1 = 0, b1 = 0, c1 = 0, a10 = 0, b10 = 0;
+  double nonsingular = 0, a1 = 0, b1 = 0, c1 = 0, a10 = 0, b10 = 0, d10 = 0;
 
   double qq = zz1;  // qq = QQ2/QQ2max is an integration variable used to
                     // integrate out rapidity
@@ -1190,12 +1201,22 @@ double HiggsDpTpartonic::distrpartoniccross(double pt, double nn, double zz1,
        (QQ2 + MH2 - sh - sqrt(std::pow(sh + MH2 - QQ2, 2) - 4. * sh * mt2));
   uh = 0.5 *
        (QQ2 + MH2 - sh + sqrt(std::pow(sh + MH2 - QQ2, 2) - 4. * sh * mt2));
-  za = -th / (QQ2 - th);
-  double jac10 = QQ2max / sqrt(std::pow(sh + MH2 - QQ2, 2) - 4. * sh * mt2);
 
+  za = -th / (QQ2 - th);
+
+  // Similar to the a1factor and b1factor above, also a10factor anb b10 factor can be written 
+  // either in terms of za or in terms of qq as below.
   double a10factor =
       (log(qq) / qq + log(QQ2max * za / -th) / qq) / QQ2max * (-th / za);
+  double adeltafactor =
+      0.5 * std::pow(log(-QQ2max / th), 2) / QQ2max * (-th / za);
+  a10factor -= adeltafactor;
   double b10factor = 1. / qq / QQ2max * (-th / za);
+  double bdeltafactor = log(-QQ2max / th) / QQ2max * (-th / za);
+  b10factor -= bdeltafactor;
+  double d10factor = -th/za/QQ2max;
+
+  double jac10 = QQ2max / sqrt(std::pow(sh + MH2 - QQ2, 2) - 4. * sh * mt2);
 
   shnew = za * sh;
   thnew = th;
@@ -1212,6 +1233,7 @@ double HiggsDpTpartonic::distrpartoniccross(double pt, double nn, double zz1,
           (1. / th * pgg(za) * log(-MUF2 * za / th) *
                gg0(shnew, thnew, uhnew, MH2) +
            za / th * big1 * log((QQ2 + pt * pt) * za / (-th)) + za / th * big2);
+      d10 += 1. / th * beta0 * log(-MUF2 * za / th) * gg0(shnew, thnew, uhnew, MH2);
     } break;
     case (1):  // gq-channel
     {
@@ -1243,18 +1265,13 @@ double HiggsDpTpartonic::distrpartoniccross(double pt, double nn, double zz1,
     } break;
   }
 
-  double adeltafactor =
-      0.5 * std::pow(log(-QQ2max / th), 2) / QQ2max * (-th / za);
-  double bdeltafactor = log(-QQ2max / th) / QQ2max * (-th / za);
-
-  double bfinal = b1 * jac1 * b1factor - b10 * jac10 * b10factor +
-                  b10 * jac10 * bdeltafactor;
-  double afinal = a1 * jac1 * a1factor - a10 * jac10 * a10factor +
-                  a10 * jac10 * adeltafactor;
+  double bfinal = b1 * jac1 * b1factor - b10 * jac10 * b10factor;
+  double afinal = a1 * jac1 * a1factor - a10 * jac10 * a10factor;
   double cfinal = c1 * jac1;
+  double dfinal = d10 * jac10 * d10factor;
   double nonsingularfinal = nonsingular * jac1;
 
-  double result = afinal + bfinal + cfinal + nonsingularfinal;
+  double result = afinal + bfinal + cfinal + dfinal + nonsingularfinal;
 
   // Mellin transform
   result *= std::pow(xx, nn - 1);

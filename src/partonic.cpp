@@ -88,7 +88,7 @@ std::vector<double> CrossHiggs::partonichiggsdpt(double pt, double nn) {
   // y2:  upper boundary of the rapidity yh       //
   //////////////////////////////////////////////////
 
-  int method = 0;
+  int method = 1;
   double deltres, delterr;
   double distres = 0, disterr = 0;
   std::vector<double> results;
